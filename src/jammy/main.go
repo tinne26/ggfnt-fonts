@@ -41,7 +41,7 @@ func main() {
 	fontBuilder.SetAscent(6)
 	fontBuilder.SetExtraAscent(1) // only for accents
 	fontBuilder.SetUppercaseAscent(5)
-	fontBuilder.SetMidlineAscent(0)
+	fontBuilder.SetMidlineAscent(3)
 	fontBuilder.SetDescent(2)
 	fontBuilder.SetHorzInterspacing(1)
 	fontBuilder.SetLineGap(0)
