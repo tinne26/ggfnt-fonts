@@ -1,6 +1,8 @@
 # ggfnt-fonts
 
-This project exposes free [ggfnt](https://github.com/tinne26/ggfnt) fonts for use with Golang programs —most commonly [Ebitengine](https://github.com/hajimehoshi/ebiten) games that use the [ptxt](https://github.com/tinne26/ptxt) font rendering library—.
+This project exposes free [ggfnt](https://github.com/tinne26/ggfnt) fonts for use with Golang programs, most commonly [Ebitengine](https://github.com/hajimehoshi/ebiten) games that use the [ptxt](https://github.com/tinne26/ptxt) font rendering library.
+
+![samples](https://github.com/tinne26/ggfnt-fonts/assets/95440833/76d481d7-9b67-43a2-8037-2a5b80cda562)
 
 ## Licenses
 
