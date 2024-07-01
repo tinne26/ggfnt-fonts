@@ -1,0 +1,6 @@
+# ignore workspaces
+go.work
+go.work.sum
+
+# ignore WIPs
+designs/*
