@@ -1,4 +1,5 @@
 # tinny
+[![Go Reference](https://pkg.go.dev/badge/tinne26/ggfnt-fonts/tinny.svg)](https://pkg.go.dev/github.com/tinne26/ggfnt-fonts/tinny)
 
 A very low resolution, rounded and friendly-looking font with a fairly decent latin character set. This font was the second one created for the ggfnt format, having two main goals:
 - Create the first proper font for ggfnt, covering at least the basic ASCII range.

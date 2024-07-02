@@ -40,3 +40,4 @@ The names of the subpackages and their paths match what you can find in this rep
 
 - **jammy 5d2** | `github.com/tinne26/ggfnt-fonts/jammy`
 - **tinny 6d3** | `github.com/tinne26/ggfnt-fonts/tinny`
+- **jumpy 6d0** | `github.com/tinne26/ggfnt-fonts/jumpy`

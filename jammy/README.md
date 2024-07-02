@@ -1,4 +1,5 @@
 # jammy
+[![Go Reference](https://pkg.go.dev/badge/tinne26/ggfnt-fonts/jammy.svg)](https://pkg.go.dev/github.com/tinne26/ggfnt-fonts/jammy)
 
 A really small font with a fairly neutral character, angular and slightly modern. This font was the first bitmap font I created for some parts of the UI in [bindless](https://github.com/tinne26/bindless), my entry for the first Ebitengine game jam in 2022. The font was greatly expanded during the next year's jam, and it eventually became the first font to be encoded in the ggfnt format (before that I was using it directly as images).
 
@@ -31,7 +32,7 @@ Rewrite rules:
 - Using hyphens (-) between lowercase characters will use a hyphen that's one pixel lower than usual. This is something weird that I did while I was testing rewrite rules involving glyph sets.
 
 Other private use characters:
-- `\uE`
+- `\uE001`: low hyphen.
 
 ## License
 
