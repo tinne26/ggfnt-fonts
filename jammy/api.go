@@ -4,7 +4,7 @@ import "io"
 import _ "embed"
 import "github.com/tinne26/ggfnt"
 
-//go:embed jammy-5d2-v0p2.ggfnt
+//go:embed jammy-5d2-v0p3.ggfnt
 var bytes []byte
 
 var cachedFont *ggfnt.Font
@@ -12,7 +12,12 @@ var cachedFont *ggfnt.Font
 const NotdefRune = '\uE000'
 const Notdef = ggfnt.GlyphIndex(0)
 const LowHyphenRune = '\uE001'
-const LowHyphen = ggfnt.GlyphIndex(160)
+const LowHyphen = ggfnt.GlyphIndex(180)
+
+const ZeroDisambiguationMarkSettingKey = ggfnt.SettingKey(0)
+const ZeroDisambiguationMarkSettingName = "zero-disambiguation-mark"
+const NumericStyleSettingKey = ggfnt.SettingKey(1)
+const NumericStyleSettingName = "numeric-style"
 
 func Release() { cachedFont = nil }
 func Font() *ggfnt.Font {

@@ -2,6 +2,8 @@ package jammy
 
 import "testing"
 
+import "github.com/tinne26/ggfnt"
+
 func TestFont(t *testing.T) {
 	// test initial state and parsing
 	if cachedFont != nil { t.Fatal("cachedFont != nil") }
@@ -38,6 +40,31 @@ func TestFont(t *testing.T) {
 	lowHyphenGlyphIndex := mappingGroup.Select(0)
 	if lowHyphenGlyphIndex != LowHyphen {
 		t.Fatalf("expected LowHyphen to be mapped to %d, found %d", LowHyphen, lowHyphenGlyphIndex)
+	}
+
+	// check setting names and keys
+	var zeroDisMarkFound, numStyleFound bool
+	font.Settings().Each(func(key ggfnt.SettingKey, name string) {
+		switch name {
+		case ZeroDisambiguationMarkSettingName:
+			if zeroDisMarkFound { panic("broken font") }
+			if key != ZeroDisambiguationMarkSettingKey {
+				t.Fatalf("expected ZeroDisambiguationMarkSettingKey to be %d, found %d", ZeroDisambiguationMarkSettingKey, key)
+			}
+			zeroDisMarkFound = true
+		case NumericStyleSettingName:
+			if numStyleFound { panic("broken font") }
+			if key != NumericStyleSettingKey {
+				t.Fatalf("expected NumericStyleSettingKey to be %d, found %d", NumericStyleSettingKey, key)
+			}
+			numStyleFound = true
+		}
+	})
+	if !zeroDisMarkFound {
+		t.Fatalf("expected to find ZeroDisambiguationMark setting as '%s'", ZeroDisambiguationMarkSettingName)
+	}
+	if !numStyleFound {
+		t.Fatalf("expected to find NumericStyle setting as '%s'", NumericStyleSettingName)
 	}
 
 	// test release

@@ -11,8 +11,14 @@ import "github.com/tinne26/ggfnt/builder"
 // - zero-disambiguation-mark: on, off
 // - numeric-style: clear, neutral, compact
 // - maybe animated cursor? either as vertical bar or underscore
+// switches:
+// - zero-switch: zero-disambiguation-mark + numeric-style
+// - numeric style: that
 
 // TODO: add named gamepad keys and so on? hmmm...
+
+// globals
+var SwitchZeroKey, SwitchNumStyleKey uint8
 
 func main() {
 	// create font builder
@@ -27,9 +33,9 @@ func main() {
 	if err != nil { panic(err) }
 	err = fontBuilder.SetAuthor("tinne")
 	if err != nil { panic(err) }
-	err = fontBuilder.SetAbout("This font was born from tinne's entries for Ebitengine game jams. Originally, a few pixel art letters were made for small parts of the UI in Bindless (2022). The next year, many more ASCII characters were added for Transition. When developing ggfnt, this was the first font created and exported to experiment with the format. Right before public release, it was expanded to include lowercase characters and complete the full ASCII range.")
+	err = fontBuilder.SetAbout("This font was born from tinne's entries for Ebitengine game jams. Originally, a few pixel art letters were made for small parts of the UI in Bindless (2022). The next year, many more ASCII characters were added for Transition. When developing ggfnt, this was the first font to be created and exported for the format. Right before public release, it was expanded to include lowercase characters and complete the full ASCII range.")
 	if err != nil { panic(err) }
-	fontBuilder.SetVersion(0, 2)
+	fontBuilder.SetVersion(0, 3)
 	creationDate := ggfnt.Date{ Month: 6, Year: 2022 }
 	err = fontBuilder.SetFirstVerDate(creationDate)
 	if err != nil { panic(err) }
@@ -48,7 +54,19 @@ func main() {
 	err = fontBuilder.GetMetricsStatus()
 	if err != nil { panic(err) }
 
+	// TODO:
+	// add two settings. then two switch types. then we can map all that without issue.
+	settingZeroDisKey , err := fontBuilder.AddSetting("zero-disambiguation-mark", "on", "off")
+	if err != nil { panic(err) }
+	settingNumStyleKey, err := fontBuilder.AddSetting("numeric-style", "clear", "neutral", "compact")
+	if err != nil { panic(err) }
+	SwitchZeroKey, err = fontBuilder.AddSwitch(settingZeroDisKey, settingNumStyleKey)
+	if err != nil { panic(err) }
+	SwitchNumStyleKey, err = fontBuilder.AddSwitch(settingNumStyleKey)
+	if err != nil { panic(err) }
+
 	// add notdef as the first glyph
+	fmt.Printf("...registering glyphs\n")
 	notdefUID, err := fontBuilder.AddGlyph(notdef)
 	if err != nil { panic(err) }
 	err = fontBuilder.SetGlyphName(notdefUID, "notdef")
@@ -76,6 +94,7 @@ func main() {
 	addRunes(fontBuilder, runeToUID, '◀', '▶', '❤', '💔') // special symbols
 
 	// set kerning pairs
+	fmt.Printf("...configuring kerning pairs\n")
 	for _, codePoint := range ".,;:!?" { // slightly reduce space after punctuation
 		fontBuilder.SetKerningPair(runeToUID[codePoint], runeToUID[' '], -1)
 	}
@@ -151,16 +170,17 @@ func main() {
 	fontBuilder.AddSimpleUtf8RewriteRule('❤', '<', '3')
 	fontBuilder.AddSimpleUtf8RewriteRule('💔', '<', '/', '3')
 	
-	// setUID, err := fontBuilder.CreateGlyphSet()
-	// if err != nil { panic(err) }
-	// fontBuilder.AddGlyphSetRange(setUID, runeToUID['a'], runeToUID['z'])
-	// for _, codePoint := range "àáäâèéêëìíïîòóöôùúûü" {
-	// 	err := fontBuilder.AddGlyphSetListGlyph(setUID, runeToUID[codePoint])
-	// 	if err != nil { panic(err) }
-	// }
-	// fontBuilder.AddGlyphRewriteRule(1, 1, 1, []uint64{setUID, runeToUID['-'], setUID}, runeToUID['\uE001'])
+	setUID, err := fontBuilder.CreateGlyphSet()
+	if err != nil { panic(err) }
+	fontBuilder.AddGlyphSetRange(setUID, runeToUID['a'], runeToUID['z'])
+	for _, codePoint := range "àáäâèéêëìíïîòóöôùúûü" {
+		err := fontBuilder.AddGlyphSetListGlyph(setUID, runeToUID[codePoint])
+		if err != nil { panic(err) }
+	}
+	fontBuilder.AddGlyphRewriteRule(1, 1, 1, []uint64{setUID, runeToUID['-'], setUID}, runeToUID['\uE001'])
 
 	// show size
+	fmt.Printf("...building font\n")
 	font, err := fontBuilder.Build()
 	if err != nil { panic(err) }
 	err = font.Validate(ggfnt.FmtDefault)
@@ -168,7 +188,7 @@ func main() {
 	fmt.Printf("...raw size of %d bytes\n", font.RawSize())
 
 	// export
-	const FileName = "jammy-5d2-v0p2.ggfnt"
+	const FileName = "jammy-5d2-v0p3.ggfnt"
 	file, err := os.Create(FileName)
 	if err != nil { panic(err) }
 	fmt.Printf("...exporting %s\n", FileName)
@@ -193,8 +213,16 @@ func addRuneRange(fontBuilder *builder.Font, codePointsMap map[rune]uint64, star
 		// * most glyphs work ok with the default placement.
 		//   the remaining ones can still be adjusted afterwards
 		if err != nil { panic(err) }
-		err = fontBuilder.Map(codePoint, uid)
-		if err != nil { panic(err) }
+		if codePoint == '0' {
+			err := mapZero(fontBuilder, uid, codePoint)
+			if err != nil { panic(err) }
+		} else if codePoint >= '1' && codePoint <= '9' {
+			err := mapNum(fontBuilder, uid, codePoint)
+			if err != nil { panic(err) }
+		} else {
+			err = fontBuilder.Map(codePoint, uid)
+			if err != nil { panic(err) }
+		}
 		codePointsMap[codePoint] = uid
 	}
 }
@@ -203,12 +231,40 @@ func addRunes(fontBuilder *builder.Font, codePointsMap map[rune]uint64, runes ..
 	for _, codePoint := range runes {
 		bitmap, found := pkgBitmaps[rune(codePoint)]
 		if !found { panic("missing bitmap for '" + string(codePoint) + "'") }
-		uid, err := fontBuilder.AddGlyph(bitmap) // *
+		uid, err := fontBuilder.AddGlyph(bitmap)
 		if err != nil { panic(err) }
-		err = fontBuilder.Map(codePoint, uid)
-		if err != nil { panic(err) }
+		if codePoint == '0' {
+			err := mapZero(fontBuilder, uid, codePoint)
+			if err != nil { panic(err) }
+		} else if codePoint >= '1' && codePoint <= '9' {
+			err := mapNum(fontBuilder, uid, codePoint)
+			if err != nil { panic(err) }
+		} else {
+			err = fontBuilder.Map(codePoint, uid)
+			if err != nil { panic(err) }
+		}
 		codePointsMap[codePoint] = uid
 	}
+}
+
+func mapZero(fontBuilder *builder.Font, clearMarkedUID uint64, codePoint rune) error {
+	clearZeroUID, err := fontBuilder.AddGlyph(altZeros[0])
+	if err != nil { return err }
+	compactZeroUID, err := fontBuilder.AddGlyph(altZeros[1])
+	if err != nil { return err }
+	return fontBuilder.MapWithSwitchSingles(codePoint, SwitchZeroKey,
+		clearMarkedUID, clearMarkedUID, compactZeroUID, // cases with disambiguation mark
+		clearZeroUID  , clearZeroUID  , compactZeroUID, // cases without disambiguation mark
+	)
+}
+
+func mapNum(fontBuilder *builder.Font, uid uint64, num rune) error {
+	numIndex := uint8(num - '1')
+	neutral, err := fontBuilder.AddGlyph(altNums[numIndex*2 + 0])
+	if err != nil { panic(err) }
+	compact, err := fontBuilder.AddGlyph(altNums[numIndex*2 + 1])
+	if err != nil { panic(err) }
+	return fontBuilder.MapWithSwitchSingles(num, SwitchNumStyleKey, uid, neutral, compact)	
 }
 
 // helper for mask creation
@@ -256,6 +312,232 @@ var notdef = rawAlphaMaskToWhiteMask(3, []byte{
 		1, 1, 1,
 		0, 0, 0,
 })
+
+var altZeros = []*image.Alpha{
+	// clearZero (can be confused with O)
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		1, 0, 0, 1, 
+		1, 0, 0, 1, 
+		1, 0, 0, 1, 
+		1, 1, 1, 1, // baseline 
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compactZero (can be confused with O)
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 1, 1,
+		1, 0, 1,
+		1, 0, 1,
+		1, 0, 1,
+		1, 1, 1, // baseline 
+		0, 0, 0,
+		0, 0, 0,
+	}),
+}
+
+var altNums = []*image.Alpha{
+	// neutral one
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		0, 0, 1, 0,
+		0, 1, 1, 0,
+		0, 0, 1, 0,
+		0, 0, 1, 0,
+		0, 0, 1, 0, // baseline
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compact one
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		0, 1, 0,
+		1, 1, 0,
+		0, 1, 0,
+		0, 1, 0,
+		1, 1, 1, // baseline
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	// neutral two
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		1, 1, 1, 1,
+		1, 0, 0, 0,
+		1, 1, 1, 1, // baseline 
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compact two
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 1, 1,
+		0, 0, 1,
+		1, 1, 1,
+		1, 0, 0,
+		1, 1, 1, // baseline
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	// neutral three
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 1, 1, 1,
+		0, 0, 0, 1,
+		1, 1, 1, 1, // baseline 
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compact three
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 1, 1,
+		0, 0, 1,
+		1, 1, 1,
+		0, 0, 1,
+		1, 1, 1, // baseline 
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	// neutral four
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 0, 0, 1,
+		1, 0, 0, 1,
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 0, 0, 1, // baseline 
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compact four
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 0, 1,
+		1, 0, 1,
+		1, 1, 1,
+		0, 0, 1,
+		0, 0, 1, // baseline 
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	// neutral five (can be confused with S)
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		1, 0, 0, 0,
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		1, 1, 1, 1, // baseline
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compact five (can be confused with S)
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 1, 1,
+		1, 0, 0,
+		1, 1, 1,
+		0, 0, 1,
+		1, 1, 1, // baseline
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	// neutral six
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		1, 0, 0, 0,
+		1, 1, 1, 1,
+		1, 0, 0, 1,
+		1, 1, 1, 1, // baseline
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compact six
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 1, 1,
+		1, 0, 0,
+		1, 1, 1,
+		1, 0, 1,
+		1, 1, 1, // baseline
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	// neutral seven
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 0, 0, 1,
+		0, 0, 0, 1,
+		0, 0, 0, 1, // baseline
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compact seven
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 1, 1,
+		0, 0, 1,
+		0, 0, 1,
+		0, 0, 1,
+		0, 0, 1, // baseline
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	// neutral eight
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		1, 0, 0, 1,
+		1, 1, 1, 1,
+		1, 0, 0, 1,
+		1, 1, 1, 1, // baseline
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compact eight
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 1, 1,
+		1, 0, 1,
+		1, 1, 1,
+		1, 0, 1,
+		1, 1, 1, // baseline
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	// neutral nine
+	rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		1, 0, 0, 1,
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 0, 0, 1, // baseline
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+	}),
+	// compact nine
+	rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 1, 1,
+		1, 0, 1,
+		1, 1, 1,
+		0, 0, 1,
+		0, 0, 1, // baseline
+		0, 0, 0,
+		0, 0, 0,
+	}),
+}
 
 var pkgBitmaps = map[rune]*image.Alpha{
 	// --- special hacks ----
