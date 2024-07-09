@@ -2,6 +2,20 @@
 
 This project exposes free [ggfnt](https://github.com/tinne26/ggfnt) fonts for use with Golang programs, most commonly [Ebitengine](https://github.com/hajimehoshi/ebiten) games that use the [ptxt](https://github.com/tinne26/ptxt) font rendering library.
 
+## Font samples
+
+`github.com/tinne26/ggfnt-fonts/tinny`
+![sample_tinny](https://github.com/tinne26/ggfnt-fonts/assets/95440833/a87208ad-e963-470d-91d2-a8a8348ef10b)
+
+`github.com/tinne26/ggfnt-fonts/graybit`
+![sample_graybit](https://github.com/tinne26/ggfnt-fonts/assets/95440833/66f07930-bde0-4e23-8adf-82e2a60487f7)
+
+`github.com/tinne26/ggfnt-fonts/omen`
+![sample_omen](https://github.com/tinne26/ggfnt-fonts/assets/95440833/b08fdc74-cc46-4d4a-8a8c-4c9f44a999d1)
+
+`github.com/tinne26/ggfnt-fonts/flick`
+![sample_flick](https://github.com/tinne26/ggfnt-fonts/assets/95440833/244ae966-8191-4544-933b-8fb6954598c0)
+
 ## Licenses
 
 Most fonts in this project are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), though some might be adaptations of well known fonts designed in other formats and with their own licenses. See each font subfolder for additional details.
@@ -36,20 +50,13 @@ The names of the subpackages and their paths match what you can find in this rep
 
 ## Pangrams
 
-Here are the few pangrams I came up with myself for the examples:
+I actually made some of the pangrams for the examples on my own, here they are:
 - Twin axes ablaze, the grumpy viking reconquered the fjord.
 - The zombie geeks acquired explosive jellyfish now!?
 - Wanted zombie geeks aquire explosive jellyfish. *(shorter but less funny imo)*
 - Saxophonists frequently acknowledge my jazzy vibes.
 - Josephine, buddy, the squeezy wolfkin are exclusively mine!
 
-They are a tad long, but at least they some nice and understandable stories.
+They are a tad long, but at least some of them have nice and understandable stories.
 
-Sadly, I don't know the authors of "amazingly few discotheques provide jukeboxes", "sphinx of black quartz, judge my vow" and other cool pangrams; I'd love to give them credit otherwise.
-
-## Subpackage cheatsheet
-
-- **tinny 6d3** | `github.com/tinne26/ggfnt-fonts/tinny`
-- **graybit 5d2** | `github.com/tinne26/ggfnt-fonts/graybit`
-- **omen 6d0** | `github.com/tinne26/ggfnt-fonts/omen`
-- **flick 6d0** | `github.com/tinne26/ggfnt-fonts/flick`
+Sadly, I don't know the authors of "amazingly few discotheques provide jukeboxes", "sphinx of black quartz, judge my vow" and other cool pangrams; I'd love to give them credit otherwise!
