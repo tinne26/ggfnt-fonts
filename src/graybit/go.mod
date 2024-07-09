@@ -1,4 +1,4 @@
-module github.com/tinne26/ggfnt-fonts/src/jammy
+module github.com/tinne26/ggfnt-fonts/src/graybit
 
 go 1.22.2
 

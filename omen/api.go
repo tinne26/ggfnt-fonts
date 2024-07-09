@@ -1,23 +1,18 @@
-package jammy
+package omen
 
 import "io"
 import _ "embed"
 import "github.com/tinne26/ggfnt"
 
-//go:embed jammy-5d2-v0p3.ggfnt
+//go:embed omen-6d0-v0p1.ggfnt
 var bytes []byte
 
 var cachedFont *ggfnt.Font
 
 const NotdefRune = '\uE000'
 const Notdef = ggfnt.GlyphIndex(0)
-const LowHyphenRune = '\uE001'
-const LowHyphen = ggfnt.GlyphIndex(180)
-
-const ZeroDisambiguationMarkSettingKey = ggfnt.SettingKey(0)
-const ZeroDisambiguationMarkSettingName = "zero-disambiguation-mark"
-const NumericStyleSettingKey = ggfnt.SettingKey(1)
-const NumericStyleSettingName = "numeric-style"
+const OStyleSettingKey = ggfnt.SettingKey(0)
+const OStyleSettingName = "o-style"
 
 func Release() { cachedFont = nil }
 func Font() *ggfnt.Font {

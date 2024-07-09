@@ -7,15 +7,12 @@ import "image"
 import "github.com/tinne26/ggfnt"
 import "github.com/tinne26/ggfnt/builder"
 
+// TODO: rename. graybit, graylite, edge, graphite, replica, naas, grayness. grayed, ash, carbon
+
 // TODO:
-// - zero-disambiguation-mark: on, off
-// - numeric-style: clear, neutral, compact
 // - maybe animated cursor? either as vertical bar or underscore
 // switches:
-// - zero-switch: zero-disambiguation-mark + numeric-style
-// - numeric style: that
-
-// TODO: add named gamepad keys and so on? hmmm...
+// - add named gamepad keys and so on? hmmm...
 
 // globals
 var SwitchZeroKey, SwitchNumStyleKey uint8
@@ -27,15 +24,15 @@ func main() {
 
 	// add metadata
 	fmt.Print("...adding metadata\n")
-	err := fontBuilder.SetName("jammy")
+	err := fontBuilder.SetName("graybit")
 	if err != nil { panic(err) }
-	err = fontBuilder.SetFamily("jammy")
+	err = fontBuilder.SetFamily("graybit")
 	if err != nil { panic(err) }
 	err = fontBuilder.SetAuthor("tinne")
 	if err != nil { panic(err) }
-	err = fontBuilder.SetAbout("This font was born from tinne's entries for Ebitengine game jams. Originally, a few pixel art letters were made for small parts of the UI in Bindless (2022). The next year, many more ASCII characters were added for Transition. When developing ggfnt, this was the first font to be created and exported for the format. Right before public release, it was expanded to include lowercase characters and complete the full ASCII range.")
+	err = fontBuilder.SetAbout("Born from tinne's entries for Ebitengine game jams and expanded through the years, this was the first font to be ever encoded in the ggfnt format.")
 	if err != nil { panic(err) }
-	fontBuilder.SetVersion(0, 3)
+	fontBuilder.SetVersion(0, 4)
 	creationDate := ggfnt.Date{ Month: 6, Year: 2022 }
 	err = fontBuilder.SetFirstVerDate(creationDate)
 	if err != nil { panic(err) }
@@ -50,11 +47,10 @@ func main() {
 	fontBuilder.SetMidlineAscent(3)
 	fontBuilder.SetDescent(2)
 	fontBuilder.SetHorzInterspacing(1)
-	fontBuilder.SetLineGap(0)
+	fontBuilder.SetLineGap(1)
 	err = fontBuilder.GetMetricsStatus()
 	if err != nil { panic(err) }
 
-	// TODO:
 	// add two settings. then two switch types. then we can map all that without issue.
 	settingZeroDisKey , err := fontBuilder.AddSetting("zero-disambiguation-mark", "on", "off")
 	if err != nil { panic(err) }
@@ -98,6 +94,7 @@ func main() {
 	for _, codePoint := range ".,;:!?" { // slightly reduce space after punctuation
 		fontBuilder.SetKerningPair(runeToUID[codePoint], runeToUID[' '], -1)
 	}
+	fontBuilder.SetKerningPair(runeToUID['.'], runeToUID['?'], -1) // improve "..?"
 	fontBuilder.SetKerningPair(runeToUID['s'], runeToUID['s'], -1)
 	fontBuilder.SetKerningPair(runeToUID['z'], runeToUID['z'], -1)
 	// the following are logical but I don't like them in practice
@@ -164,6 +161,7 @@ func main() {
 		fontBuilder.SetKerningPair(runeToUID['Í'], runeToUID[codePoint], -1)
 	}
 	fontBuilder.SetKerningPair(runeToUID['Í'], runeToUID['j'], -2)
+	//fontBuilder.SetKerningPair(runeToUID['L'], runeToUID['Y'], -1) // this is not bad, but in case of ambivalence best avoid touching
 	//fontBuilder.SetKerningPair(runeToUID['r'], runeToUID['s'], -1) // this makes sense but doesn't look good in practice
 
 	// add rewrite rules
@@ -188,7 +186,7 @@ func main() {
 	fmt.Printf("...raw size of %d bytes\n", font.RawSize())
 
 	// export
-	const FileName = "jammy-5d2-v0p3.ggfnt"
+	const FileName = "graybit-5d2-v0p4.ggfnt"
 	file, err := os.Create(FileName)
 	if err != nil { panic(err) }
 	fmt.Printf("...exporting %s\n", FileName)

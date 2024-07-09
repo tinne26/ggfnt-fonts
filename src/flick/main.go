@@ -14,11 +14,11 @@ func main() {
 
 	// add metadata
 	fmt.Print("...adding metadata\n")
-	err := fontBuilder.SetName("jumpy")
+	err := fontBuilder.SetName("flick")
 	if err != nil { panic(err) }
-	err = fontBuilder.SetFamily("jumpy")
+	err = fontBuilder.SetFamily("flick")
 	if err != nil { panic(err) }
-	err = fontBuilder.SetAuthor("jumpy")
+	err = fontBuilder.SetAuthor("tinne")
 	if err != nil { panic(err) }
 	err = fontBuilder.SetAbout("The first font created to experiment with glyph animation on ggfnt. It's a very silly font otherwise, uppercase-only and with many glyphs being quite similar or identical to 'tinny'.")
 	if err != nil { panic(err) }
@@ -53,9 +53,9 @@ func main() {
 	// add all other glyphs
 	runeToUID := make(map[rune]uint64, 128)
 	addRunes(fontBuilder, runeToUID, ' ') // spacing
-	addRuneRange(fontBuilder, runeToUID, 'A', 'Z') // uppercase
-	addRunes(fontBuilder, runeToUID, '.', ',', ':', ';', '!', '?') // critical punctuation
-	// addRuneRange(fontBuilder, runeToUID, ' ', '~') // ASCII
+	addRuneRange(fontBuilder, runeToUID, ' ', '`') // until 'a'
+	addRuneRange(fontBuilder, runeToUID, '{', '~') // until ASCII END
+	addRunes(fontBuilder, runeToUID, '´', '¨', '·', '¡', '¿', '¦') // additional punctuation
 	// addRunes(fontBuilder, runeToUID,
 	// 	'À', 'Á', 'Â', 'Ä', 'à', 'á', 'â', 'ä',
 	// 	'È', 'É', 'Ê', 'Ë', 'è', 'é', 'ê', 'ë',
@@ -80,7 +80,7 @@ func main() {
 	fmt.Printf("...raw size of %d bytes\n", font.RawSize())
 
 	// export
-	const FileName = "jumpy-6d0-v0p1.ggfnt"
+	const FileName = "flick-6d0-v0p1.ggfnt"
 	file, err := os.Create(FileName)
 	if err != nil { panic(err) }
 	fmt.Printf("...exporting %s\n", FileName)
@@ -404,11 +404,20 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1,
 	}),
 	'!': rawAlphaMaskToWhiteMask(1, []byte{
-		1,
+		0,
 		1,
 		1,
 		1,
 		0,
+		1,
+	}),
+	'¡': rawAlphaMaskToWhiteMask(1, []byte{
+		0,
+		0,
+		1,
+		0,
+		1,
+		1, // baseline
 		1,
 	}),
 	'?': rawAlphaMaskToWhiteMask(3, []byte{
@@ -418,6 +427,344 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 0,
 		0, 0, 0,
 		0, 1, 0,
+	}),
+	'¿': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		0, 1, 0,
+		0, 0, 0,
+		0, 1, 0,
+		1, 0, 0,
+		1, 0, 1, // baseline
+		0, 1, 0,
+	}),
+
+	// remaining ASCII except lowercase
+	'"': rawAlphaMaskToWhiteMask(3, []byte{
+		1, 0, 1,
+		1, 0, 1,
+		0, 0, 0,
+		0, 0, 0,
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	'#': rawAlphaMaskToWhiteMask(5, []byte{
+		0, 0, 0, 0, 0,
+		0, 1, 0, 1, 0,
+		1, 1, 1, 1, 1,
+		0, 1, 0, 1, 0,
+		1, 1, 1, 1, 1,
+		0, 1, 0, 1, 0,
+	}),
+	'$': rawAlphaMaskToWhiteMask(5, []byte{
+		0, 0, 1, 0, 0,
+		1, 1, 1, 1, 1,
+		1, 0, 1, 0, 0,
+		1, 1, 1, 1, 1,
+		0, 0, 1, 0, 1,
+		1, 1, 1, 1, 1, // baseline
+		0, 0, 1, 0, 0,
+	}),
+	'%': rawAlphaMaskToWhiteMask(7, []byte{
+		0, 1, 0, 0, 0, 0, 0,
+		1, 0, 1, 0, 1, 0, 0,
+		0, 1, 0, 0, 1, 0, 0,
+		0, 0, 0, 1, 0, 0, 0,
+		0, 0, 1, 0, 0, 1, 0,
+		0, 0, 1, 0, 1, 0, 1, // baseline
+		0, 0, 0, 0, 0, 1, 0,
+	}),
+	'&': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		0, 1, 0, 0,
+		1, 0, 1, 0,
+		0, 1, 1, 0,
+		1, 0, 0, 1,
+		1, 1, 1, 0, // baseline
+	}),
+	'\'': rawAlphaMaskToWhiteMask(1, []byte{
+		1,
+		1,
+		0,
+		0,
+		0,
+		0,
+	}),
+	'(': rawAlphaMaskToWhiteMask(2, []byte{
+		0, 0,
+		0, 1,
+		1, 0,
+		1, 0,
+		1, 0,
+		0, 1,
+	}),
+	')': rawAlphaMaskToWhiteMask(2, []byte{
+		0, 0,
+		1, 0,
+		0, 1,
+		0, 1,
+		0, 1,
+		1, 0,
+	}),
+	'*': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 0, 1,
+		0, 1, 0, 
+		1, 0, 1,
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	'+': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		0, 0, 0,
+		0, 1, 0, 
+		1, 1, 1,
+		0, 1, 0,
+		0, 0, 0,
+	}),
+	'-': rawAlphaMaskToWhiteMask(2, []byte{
+		0, 0,
+		0, 0,
+		0, 0,
+		1, 1,
+		0, 0,
+		0, 0,
+	}),
+	'/': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		0, 0, 1,
+		0, 0, 1,
+		0, 1, 0,
+		1, 0, 0,
+		1, 0, 0,
+	}),
+	'0': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		0, 1, 1, 0,
+		1, 0, 0, 1,
+		1, 0, 0, 1,
+		1, 0, 0, 1,
+		0, 1, 1, 0,
+	}),
+	'1': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		0, 1, 0,
+		1, 1, 0,
+		0, 1, 0,
+		0, 1, 0,
+		1, 1, 1,
+	}),
+	'2': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		0, 1, 1, 0,
+		1, 0, 0, 1,
+		0, 0, 1, 0,
+		0, 1, 0, 0,
+		1, 1, 1, 1,
+	}),
+	'3': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 0,
+		0, 0, 0, 1,
+		0, 1, 1, 0,
+		0, 0, 0, 1,
+		1, 1, 1, 0,
+	}),
+	'4': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		0, 0, 1, 1,
+		0, 1, 0, 1,
+		1, 0, 0, 1,
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+	}),
+	'5': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		1, 0, 0, 0,
+		1, 1, 1, 0,
+		0, 0, 0, 1,
+		1, 1, 1, 0,
+	}),
+	'6': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		0, 1, 1, 0,
+		1, 0, 0, 0,
+		1, 1, 1, 0,
+		1, 0, 0, 1,
+		0, 1, 1, 0,
+	}),
+	'7': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 0, 1, 0,
+		0, 1, 0, 0,
+		0, 1, 0, 0,
+	}),
+	'8': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		0, 1, 1, 0,
+		1, 0, 0, 1,
+		0, 1, 1, 0,
+		1, 0, 0, 1,
+		0, 1, 1, 0,
+	}),
+	'9': rawAlphaMaskToWhiteMask(4, []byte{
+		0, 0, 0, 0,
+		0, 1, 1, 0,
+		1, 0, 0, 1,
+		0, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 1, 1, 0,
+	}),
+	'<': rawAlphaMaskToWhiteMask(2, []byte{
+		0, 0,
+		0, 0,
+		0, 1,
+		1, 0,
+		0, 1,
+		0, 0,
+	}),
+	'=': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		0, 0, 0,
+		1, 1, 1,
+		0, 0, 0,
+		1, 1, 1,
+		0, 0, 0,
+	}),
+	'>': rawAlphaMaskToWhiteMask(2, []byte{
+		0, 0,
+		0, 0,
+		1, 0,
+		0, 1,
+		1, 0,
+		0, 0,
+	}),
+	'@': rawAlphaMaskToWhiteMask(6, []byte{
+		0, 0, 0, 0, 0, 0,
+		0, 0, 1, 1, 0, 0,
+		0, 1, 0, 0, 1, 0,
+		1, 0, 1, 1, 0, 1,
+		1, 0, 1, 1, 1, 1,
+		0, 1, 0, 0, 0, 0, // baseline
+		0, 0, 1, 1, 0, 0,
+	}),
+	'[': rawAlphaMaskToWhiteMask(2, []byte{
+		0, 0,
+		1, 1,
+		1, 0,
+		1, 0,
+		1, 0,
+		1, 1,
+	}),
+	'\\': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 0, 0,
+		1, 0, 0,
+		0, 1, 0,
+		0, 0, 1,
+		0, 0, 1,
+	}),
+	']': rawAlphaMaskToWhiteMask(2, []byte{
+		0, 0,
+		1, 1,
+		0, 1,
+		0, 1,
+		0, 1,
+		1, 1,
+	}),
+	'^': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		0, 1, 0,
+		1, 0, 1,
+		0, 0, 0,
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	'_': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		0, 0, 0,
+		0, 0, 0,
+		0, 0, 0,
+		0, 0, 0,
+		0, 0, 0, // baseline
+		1, 1, 1,
+	}),
+	'`': rawAlphaMaskToWhiteMask(2, []byte{
+		0, 0,
+		1, 0,
+		0, 1,
+		0, 0,
+		0, 0,
+		0, 0,
+	}),
+	'´': rawAlphaMaskToWhiteMask(2, []byte{
+		0, 0,
+		0, 1,
+		1, 0,
+		0, 0,
+		0, 0,
+		0, 0,
+	}),
+	'¨': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 0,
+		1, 0, 1,
+		0, 0, 0,
+		0, 0, 0,
+		0, 0, 0,
+		0, 0, 0,
+	}),
+	'{': rawAlphaMaskToWhiteMask(3, []byte{
+		0, 0, 1,
+		0, 1, 0,
+		0, 1, 0,
+		1, 0, 0,
+		0, 1, 0,
+		0, 1, 0, // baseline
+		0, 0, 1,
+	}),
+	'|': rawAlphaMaskToWhiteMask(1, []byte{
+		0,
+		1,
+		1,
+		1,
+		1,
+		1,
+	}),
+	'¦': rawAlphaMaskToWhiteMask(1, []byte{
+		0,
+		1,
+		1,
+		0,
+		1,
+		1,
+	}),
+	'·': rawAlphaMaskToWhiteMask(1, []byte{
+		0,
+		0,
+		0,
+		1,
+		0,
+		0,
+	}),
+	'}': rawAlphaMaskToWhiteMask(3, []byte{
+		1, 0, 0,
+		0, 1, 0,
+		0, 1, 0,
+		0, 0, 1,
+		0, 1, 0,
+		0, 1, 0, // baseline
+		1, 0, 0,
+	}),
+	'~': rawAlphaMaskToWhiteMask(5, []byte{
+		0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0,
+		0, 1, 0, 0, 0,
+		1, 0, 1, 0, 1,
+		0, 0, 0, 1, 0,
+		0, 0, 0, 0, 0, // baseline
+		0, 0, 0, 0, 0,
 	}),
 }
 

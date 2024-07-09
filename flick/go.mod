@@ -1,4 +1,4 @@
-module github.com/tinne26/ggfnt-fonts/jammy
+module github.com/tinne26/ggfnt-fonts/flick
 
 go 1.22.2
 

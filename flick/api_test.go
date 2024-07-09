@@ -1,4 +1,4 @@
-package jumpy
+package flick
 
 import "testing"
 
@@ -9,7 +9,7 @@ func TestFont(t *testing.T) {
 	if cachedFont == nil { t.Fatal("cachedFont == nil") }
 
 	// ensure font name is what we expected
-	const ExpectedFontName = "jumpy"
+	const ExpectedFontName = "flick"
 	name := font.Header().Name()
 	if name != ExpectedFontName {
 		t.Fatalf("expected font name to be \"" + ExpectedFontName + "\", got \"%s\" instead", name)

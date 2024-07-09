@@ -29,6 +29,7 @@ func main() {
 	if err != nil { panic(err) }
 	err = fontBuilder.SetFirstVerDate(ggfnt.Date{ Month: 6, Day: 18, Year: 2024 })
 	if err != nil { panic(err) }
+	fontBuilder.SetVersion(0, 2)
 
 	// set metrics
 	fmt.Print("...setting metrics\n")
@@ -89,6 +90,20 @@ func main() {
 	}
 
 	// set kerning pairs
+	for _, codePoint := range ".,;:!?-–‑—" { // slightly reduce space after punctuation
+		fontBuilder.SetKerningPair(runeToUID[codePoint], runeToUID[' '], -1)
+	}
+	for _, codePoint := range "-–‑—~" { // slightly reduce space before punctuation
+		fontBuilder.SetKerningPair(runeToUID[' '], runeToUID[codePoint], -1)
+	}
+	// none of these convinced me. none looked wrong,
+	// but in case of doubt we take the simplest path
+	// for _, codePoint := range "FYPT" {
+		//fontBuilder.SetKerningPair(runeToUID[codePoint], runeToUID['.'], -1)
+		//fontBuilder.SetKerningPair(runeToUID[codePoint], runeToUID[','], -1)
+		//fontBuilder.SetKerningPair(runeToUID[codePoint], runeToUID['_'], -1)
+	// }
+
 	fontBuilder.SetKerningPair(runeToUID['y'], runeToUID['j'], 1)
 	fontBuilder.SetKerningPair(runeToUID['q'], runeToUID['j'], 1)
 	fontBuilder.SetKerningPair(runeToUID['g'], runeToUID['j'], 1)
@@ -123,6 +138,7 @@ func main() {
 		fontBuilder.SetKerningPair(runeToUID['ï'], runeToUID[codePoint], +2)
 		fontBuilder.SetKerningPair(runeToUID['î'], runeToUID[codePoint], +2)
 	}
+	fontBuilder.SetKerningPair(runeToUID['L'], runeToUID['Y'], -1)
 	// TODO: maybe some UPPER-lower sequences could use some kerning.
 	// "F{o|a|e|...}" if a good example (though it's debatable if we
 	// really want this)
@@ -135,7 +151,7 @@ func main() {
 	fmt.Printf("...raw size of %d bytes\n", font.RawSize())
 
 	// export
-	const FileName = "tinny-6d3-v0p1.ggfnt"
+	const FileName = "tinny-6d3-v0p2.ggfnt"
 	file, err := os.Create(FileName)
 	if err != nil { panic(err) }
 	fmt.Printf("...exporting %s\n", FileName)

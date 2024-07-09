@@ -1,4 +1,4 @@
-package jammy
+package graybit
 
 import "testing"
 
@@ -11,7 +11,7 @@ func TestFont(t *testing.T) {
 	if cachedFont == nil { t.Fatal("cachedFont == nil") }
 
 	// ensure font name is what we expected
-	const ExpectedFontName = "jammy"
+	const ExpectedFontName = "graybit"
 	name := font.Header().Name()
 	if name != ExpectedFontName {
 		t.Fatalf("expected font name to be \"" + ExpectedFontName + "\", got \"%s\" instead", name)

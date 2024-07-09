@@ -1,13 +1,15 @@
-# jammy
-[![Go Reference](https://pkg.go.dev/badge/tinne26/ggfnt-fonts/jammy.svg)](https://pkg.go.dev/github.com/tinne26/ggfnt-fonts/jammy)
+# graybit
+[![Go Reference](https://pkg.go.dev/badge/tinne26/ggfnt-fonts/graybit.svg)](https://pkg.go.dev/github.com/tinne26/ggfnt-fonts/graybit)
 
-A really small font with a fairly neutral character, angular and slightly modern. This font was the first bitmap font I created for some parts of the UI in [bindless](https://github.com/tinne26/bindless), my entry for the first Ebitengine game jam in 2022. The font was greatly expanded during the next year's jam, and it eventually became the first font to be encoded in the ggfnt format (before that I was using it directly as images).
+A pretty small font with a fairly neutral character, compact, angular and slightly modern. Uppercase letters are balanced and functional, sharp but without being harsh or imposing; lowercase letters are more modest and easy-going (at a base size of 3x3, glyph design is quite restrictive).
+
+This font was the first bitmap font I created for some parts of the UI in [bindless](https://github.com/tinne26/bindless), my entry for the first Ebitengine game jam in 2022. The font was greatly expanded during the next year's jam, and it eventually became the first font to be encoded in the ggfnt format (before that I was using it directly as images).
 
 Right before making all the ptxt and ggfnt projects public, I expanded this font even more to cover the full ASCII range and a few more characters.
 
 The import path is:
 ```Golang
-import "github.com/tinne26/ggfnt-fonts/jammy"
+import "github.com/tinne26/ggfnt-fonts/graybit"
 ```
 
 ## Glyphs
@@ -25,7 +27,7 @@ Common glyphs:
 
 Named glyphs:
 - `"notdef"`, also mapped to `\uE000` for accessibility.
-- TODO: expose all the special characters for buttons? Probably yes.
+- TODO: expose all the special characters for buttons? Maybe...
 
 Rewrite rules:
 - `<3` will translate to ❤, and `</3` to 💔.

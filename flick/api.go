@@ -1,4 +1,4 @@
-package jumpy
+package flick
 
 import "io"
 import "time"
@@ -6,7 +6,7 @@ import "math"
 import _ "embed"
 import "github.com/tinne26/ggfnt"
 
-//go:embed jumpy-6d0-v0p1.ggfnt
+//go:embed flick-6d0-v0p1.ggfnt
 var bytes []byte
 
 var cachedFont *ggfnt.Font
@@ -35,7 +35,7 @@ const (
 )
 
 // Can be configured and used with ptxt:
-//   var picker jumpy.GoldenPicker
+//   var picker flick.GoldenPicker
 //   strand.GlyphPickers().Add(&picker)
 // This glyph picker is a basic implementation using an alternating
 // sequence for glyphs based on time and the golden ratio. In general,
@@ -97,7 +97,7 @@ func (self *GoldenPicker) initialize() {
 }
 
 // Can be configured and used with ptxt:
-//   var picker jumpy.PulsePicker
+//   var picker flick.PulsePicker
 //   strand.GlyphPickers().Add(&picker)
 // This glyph picker chooses glyphs based on a pulse function, which has
 // a certain low, transition and high widths, and some speed. In general

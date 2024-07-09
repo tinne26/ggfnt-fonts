@@ -2,8 +2,6 @@
 
 This project exposes free [ggfnt](https://github.com/tinne26/ggfnt) fonts for use with Golang programs, most commonly [Ebitengine](https://github.com/hajimehoshi/ebiten) games that use the [ptxt](https://github.com/tinne26/ptxt) font rendering library.
 
-![samples](https://github.com/tinne26/ggfnt-fonts/assets/95440833/76d481d7-9b67-43a2-8037-2a5b80cda562)
-
 ## Licenses
 
 Most fonts in this project are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), though some might be adaptations of well known fonts designed in other formats and with their own licenses. See each font subfolder for additional details.
@@ -12,21 +10,21 @@ The Golang code used to provide access to the fonts is extremely trivial and MIT
 
 ## Usage
 
-All subpackages expose two methods:
+All subpackages expose at least two methods:
 - `Font()`, which parses the font if it wasn't parsed yet, caches it and returns it as a `*ggfnt.Font`.
 - `Release()`, which frees the cached font if it was loaded at any point by `Font()`.
 
-Some subpackages contain additional constants for specific glyphs or code point mappings. The most common is probably `NotdefRune` (`rune`) and `Notdef` (`ggfnt.GlyphIndex`). Glyph pickers might also be provided for some fancy fonts in order to make life easier when working with ptxt.
+Some subpackages contain additional constants for font settings, specific glyphs and code point mappings. The most common is probably `NotdefRune` (`rune`) and `Notdef` (`ggfnt.GlyphIndex`). Glyph pickers might also be provided for some fancy fonts in order to make life easier when working with ptxt.
 
 Example program:
 ```Golang
 package main
 
 import "fmt"
-import "github.com/tinne26/ggfnt-fonts/jammy"
+import "github.com/tinne26/ggfnt-fonts/graybit"
 
 func main() {
-	font := jammy.Font()
+	font := graybit.Font()
 	verMajor, verMinor := font.Header().VersionMajor(), font.Header().VersionMinor()
 	fmt.Printf("Font: %s (v%d.%02d)\n", font.Header().Name(), verMajor, verMinor)
 	fmt.Printf("Num. glyphs: %d\n", font.Glyphs().Count())
@@ -36,8 +34,22 @@ func main() {
 ```
 The names of the subpackages and their paths match what you can find in this repository.
 
+## Pangrams
+
+Here are the few pangrams I came up with myself for the examples:
+- Twin axes ablaze, the grumpy viking reconquered the fjord.
+- The zombie geeks acquired explosive jellyfish now!?
+- Wanted zombie geeks aquire explosive jellyfish. *(shorter but less funny imo)*
+- Saxophonists frequently acknowledge my jazzy vibes.
+- Josephine, buddy, the squeezy wolfkin are exclusively mine!
+
+They are a tad long, but at least they some nice and understandable stories.
+
+Sadly, I don't know the authors of "amazingly few discotheques provide jukeboxes", "sphinx of black quartz, judge my vow" and other cool pangrams; I'd love to give them credit otherwise.
+
 ## Subpackage cheatsheet
 
-- **jammy 5d2** | `github.com/tinne26/ggfnt-fonts/jammy`
 - **tinny 6d3** | `github.com/tinne26/ggfnt-fonts/tinny`
-- **jumpy 6d0** | `github.com/tinne26/ggfnt-fonts/jumpy`
+- **graybit 5d2** | `github.com/tinne26/ggfnt-fonts/graybit`
+- **omen 6d0** | `github.com/tinne26/ggfnt-fonts/omen`
+- **flick 6d0** | `github.com/tinne26/ggfnt-fonts/flick`
