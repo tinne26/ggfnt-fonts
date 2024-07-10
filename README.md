@@ -56,10 +56,12 @@ The names of the subpackages and their paths match what you can find in this rep
 I actually made some of the pangrams for the examples on my own, here they are:
 - Twin axes ablaze, the grumpy viking reconquered the fjord.
 - The zombie geeks acquired explosive jellyfish now!?
-- Wanted zombie geeks aquire explosive jellyfish. *(shorter but less funny imo)*
 - Saxophonists frequently acknowledge my jazzy vibes.
+- Catalyzer hijack verified, equip low oxygen bombs.
 - Josephine, buddy, the squeezy wolfkin are exclusively mine!
 
-They are a tad long, but at least some of them have nice and understandable stories.
+They are a tad long, but at least some of them have nice and understandable stories. A few more variations:
+- Wanted zombie geeks aquire explosive jellyfish. *(shorter but less funny imo)*
+- Saxophonists disqualify overembellished spacewalking jazz. *(only five words, but convoluted)*
 
 Sadly, I don't know the authors of "amazingly few discotheques provide jukeboxes", "sphinx of black quartz, judge my vow" and other cool pangrams; I'd love to give them credit otherwise!
