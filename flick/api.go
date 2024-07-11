@@ -6,7 +6,7 @@ import "math"
 import _ "embed"
 import "github.com/tinne26/ggfnt"
 
-//go:embed flick-6d0-v0p1.ggfnt
+//go:embed flick-6d0-v0p2.ggfnt
 var bytes []byte
 
 var cachedFont *ggfnt.Font

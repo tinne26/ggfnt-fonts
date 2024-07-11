@@ -4,7 +4,7 @@ import "io"
 import _ "embed"
 import "github.com/tinne26/ggfnt"
 
-//go:embed tinny-6d3-v0p2.ggfnt
+//go:embed tinny-6d3-v0p3.ggfnt
 var bytes []byte
 
 var cachedFont *ggfnt.Font

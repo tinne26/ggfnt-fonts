@@ -26,7 +26,7 @@ func main() {
 	if err != nil { panic(err) }
 	err = fontBuilder.SetAbout("Uppercase font vaguely inspired by old norse glyphs.")
 	if err != nil { panic(err) }
-	fontBuilder.SetVersion(0, 1)
+	fontBuilder.SetVersion(0, 2)
 	creationDate := ggfnt.Date{ Day: 7, Month: 7, Year: 2024 }
 	err = fontBuilder.SetFirstVerDate(creationDate)
 	if err != nil { panic(err) }
@@ -104,7 +104,7 @@ func main() {
 	fmt.Printf("...raw size of %d bytes\n", font.RawSize())
 
 	// export
-	const FileName = "omen-6d0-v0p1.ggfnt"
+	const FileName = "omen-6d0-v0p2.ggfnt"
 	file, err := os.Create(FileName)
 	if err != nil { panic(err) }
 	fmt.Printf("...exporting %s\n", FileName)
@@ -160,16 +160,14 @@ func addRunes(fontBuilder *builder.Font, codePointsMap map[rune]uint64, runes ..
 }
 
 // helper for mask creation
-func rawAlphaMaskToWhiteMask(width int, mask []byte) *image.Alpha {
+func rawMask(width int, mask []byte) *image.Alpha {
 	height := len(mask)/width
 	img := image.NewAlpha(image.Rect(0, -8, width, -8 + height))
-	for i := 0; i < len(mask); i++ {
-		img.Pix[i] = 255*mask[i]
-	}
+	copy(img.Pix, mask)
 	return img
 }
 
-var notdef = rawAlphaMaskToWhiteMask(4, []byte{
+var notdef = rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1, // extra ascent
 		1, 0, 0, 1,
@@ -182,7 +180,7 @@ var notdef = rawAlphaMaskToWhiteMask(4, []byte{
 })
 
 var pkgBitmaps = map[rune]*image.Alpha{
-	' ': rawAlphaMaskToWhiteMask(3, []byte{
+	' ': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		0, 0, 0,
@@ -193,7 +191,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, // baseline
 		0, 0, 0,
 	}),
-	' ': rawAlphaMaskToWhiteMask(2, []byte{ // thin space
+	' ': rawMask(2, []byte{ // thin space
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		0, 0,
@@ -204,7 +202,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, // baseline
 		0, 0,
 	}),
-	' ': rawAlphaMaskToWhiteMask(1, []byte{ // hair space
+	' ': rawMask(1, []byte{ // hair space
 		0, // extra ascent
 		0, // extra ascent
 		0,
@@ -215,7 +213,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, // baseline
 		0,
 	}),
-	'!': rawAlphaMaskToWhiteMask(1, []byte{
+	'!': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		1,
@@ -226,7 +224,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, // baseline
 		0,
 	}),
-	'"': rawAlphaMaskToWhiteMask(3, []byte{
+	'"': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		1, 0, 1,
@@ -237,7 +235,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, // baseline
 		0, 0, 0,
 	}),
-	'#': rawAlphaMaskToWhiteMask(5, []byte{
+	'#': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0,
@@ -248,7 +246,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 0, 1, 0, // baseline
 		0, 0, 0, 0, 0,
 	}),
-	'$': rawAlphaMaskToWhiteMask(5, []byte{
+	'$': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 1, 0, 0, // extra ascent
 		1, 1, 1, 1, 1,
@@ -259,7 +257,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, 1, // baseline
 		0, 0, 1, 0, 0,
 	}),
-	'%': rawAlphaMaskToWhiteMask(9, []byte{
+	'%': rawMask(9, []byte{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, 0, 0, 0, 0, // extra ascent
 		0, 1, 0, 0, 0, 1, 0, 0, 0,
@@ -270,7 +268,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, 1, 0, 0, 0, 1, 0, // baseline
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 	}),
-	'&': rawAlphaMaskToWhiteMask(4, []byte{
+	'&': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 0, 0,
@@ -281,7 +279,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 0, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'\'': rawAlphaMaskToWhiteMask(1, []byte{
+	'\'': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		1,
@@ -292,7 +290,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, // baseline
 		0,	
 	}),
-	'(': rawAlphaMaskToWhiteMask(2, []byte{
+	'(': rawMask(2, []byte{
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		0, 1,
@@ -303,7 +301,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, // baseline
 		0, 0,
 	}),
-	')': rawAlphaMaskToWhiteMask(2, []byte{
+	')': rawMask(2, []byte{
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		1, 0,
@@ -314,7 +312,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, // baseline
 		0, 0,
 	}),
-	'*': rawAlphaMaskToWhiteMask(3, []byte{
+	'*': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		1, 0, 1,
@@ -325,7 +323,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, // baseline
 		0, 0, 0,	
 	}),
-	'+': rawAlphaMaskToWhiteMask(3, []byte{
+	'+': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		0, 0, 0,
@@ -336,7 +334,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, // baseline
 		0, 0, 0,
 	}),
-	',': rawAlphaMaskToWhiteMask(1, []byte{
+	',': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		0,
@@ -347,7 +345,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, // baseline
 		1,
 	}),
-	'-': rawAlphaMaskToWhiteMask(2, []byte{
+	'-': rawMask(2, []byte{
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		0, 0,
@@ -358,7 +356,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, // baseline
 		0, 0,
 	}),
-	'.': rawAlphaMaskToWhiteMask(1, []byte{
+	'.': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		0,
@@ -369,7 +367,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, // baseline
 		0,
 	}),
-	'/': rawAlphaMaskToWhiteMask(3, []byte{
+	'/': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		0, 0, 1,
@@ -380,7 +378,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, // baseline
 		0, 0, 0,
 	}),
-	'0': rawAlphaMaskToWhiteMask(4, []byte{
+	'0': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 1, 0,
@@ -391,7 +389,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'1': rawAlphaMaskToWhiteMask(4, []byte{
+	'1': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 0, 1, 0,
@@ -402,7 +400,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'2': rawAlphaMaskToWhiteMask(4, []byte{
+	'2': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 1, 0,
@@ -413,7 +411,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'3': rawAlphaMaskToWhiteMask(4, []byte{
+	'3': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 1, 0,
@@ -424,7 +422,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'4': rawAlphaMaskToWhiteMask(4, []byte{
+	'4': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 0, 1,
@@ -435,7 +433,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'5': rawAlphaMaskToWhiteMask(4, []byte{
+	'5': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -446,7 +444,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'6': rawAlphaMaskToWhiteMask(4, []byte{
+	'6': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 1, 0,
@@ -457,7 +455,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'7': rawAlphaMaskToWhiteMask(4, []byte{
+	'7': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -468,7 +466,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'8': rawAlphaMaskToWhiteMask(4, []byte{
+	'8': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 1, 0,
@@ -479,7 +477,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'9': rawAlphaMaskToWhiteMask(4, []byte{
+	'9': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 1, 0,
@@ -490,7 +488,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	':': rawAlphaMaskToWhiteMask(1, []byte{
+	':': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		0,
@@ -501,7 +499,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, // baseline
 		0,		
 	}),
-	';': rawAlphaMaskToWhiteMask(1, []byte{
+	';': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		0,
@@ -512,7 +510,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, // baseline
 		1,		
 	}),
-	'<': rawAlphaMaskToWhiteMask(2, []byte{
+	'<': rawMask(2, []byte{
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		0, 0,
@@ -523,7 +521,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, // baseline
 		0, 0,
 	}),
-	'=': rawAlphaMaskToWhiteMask(3, []byte{
+	'=': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		0, 0, 0,
@@ -534,7 +532,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, // baseline
 		0, 0, 0,
 	}),
-	'>': rawAlphaMaskToWhiteMask(2, []byte{
+	'>': rawMask(2, []byte{
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		0, 0,
@@ -545,7 +543,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, // baseline
 		0, 0,
 	}),
-	'?': rawAlphaMaskToWhiteMask(4, []byte{
+	'?': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -556,7 +554,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 0, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'@': rawAlphaMaskToWhiteMask(6, []byte{
+	'@': rawMask(6, []byte{
 		0, 0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1, 1, 1,
@@ -567,7 +565,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, 1, 1, // baseline
 		0, 0, 0, 0, 0, 0,
 	}),
-	'A': rawAlphaMaskToWhiteMask(4, []byte{
+	'A': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -578,7 +576,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'B': rawAlphaMaskToWhiteMask(4, []byte{
+	'B': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 0,
@@ -589,7 +587,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'C': rawAlphaMaskToWhiteMask(4, []byte{
+	'C': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -600,7 +598,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'Ç': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ç': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -612,7 +610,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 0, 0,
 		1, 0, 0, 0,
 	}),
-	'D': rawAlphaMaskToWhiteMask(4, []byte{
+	'D': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 0, 0,
@@ -623,7 +621,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 0, // baseline
 		0, 0, 0, 0,		
 	}),
-	'E': rawAlphaMaskToWhiteMask(3, []byte{
+	'E': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		1, 1, 1,
@@ -634,7 +632,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, // baseline
 		0, 0, 0,		
 	}),
-	'F': rawAlphaMaskToWhiteMask(3, []byte{
+	'F': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		1, 1, 1,
@@ -645,7 +643,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, // baseline
 		0, 0, 0,		
 	}),
-	'G': rawAlphaMaskToWhiteMask(4, []byte{
+	'G': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -656,7 +654,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'H': rawAlphaMaskToWhiteMask(4, []byte{
+	'H': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 0, 0, 1,
@@ -667,7 +665,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'I': rawAlphaMaskToWhiteMask(1, []byte{
+	'I': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		1,
@@ -687,7 +685,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		// 1, 1, 1, // baseline
 		// 0, 0, 0,
 	}),
-	'J': rawAlphaMaskToWhiteMask(4, []byte{
+	'J': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 1, 1,
@@ -698,7 +696,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'K': rawAlphaMaskToWhiteMask(4, []byte{
+	'K': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 0, 0, 1,
@@ -709,7 +707,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'L': rawAlphaMaskToWhiteMask(3, []byte{
+	'L': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		1, 0, 0,
@@ -720,7 +718,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, // baseline
 		0, 0, 0,		
 	}),
-	'M': rawAlphaMaskToWhiteMask(5, []byte{
+	'M': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, // extra ascent
 		1, 0, 0, 0, 1,
@@ -731,7 +729,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 0, 1, // baseline
 		0, 0, 0, 0, 0,		
 	}),
-	'N': rawAlphaMaskToWhiteMask(4, []byte{
+	'N': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 0, 0, 1,
@@ -742,7 +740,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'Ñ': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ñ': rawMask(4, []byte{
 		0, 1, 0, 1, // extra ascent
 		1, 0, 1, 0, // extra ascent
 		0, 0, 0, 0,
@@ -753,7 +751,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'O': rawAlphaMaskToWhiteMask(5, []byte{
+	'O': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, // extra ascent
 		0, 1, 1, 1, 0,
@@ -764,7 +762,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 1, 0, // baseline1
 		0, 0, 0, 0, 0,
 	}),
-	'P': rawAlphaMaskToWhiteMask(4, []byte{
+	'P': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -784,7 +782,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		// 1, 0, 0, // baseline
 		// 0, 0, 0,
 	}),
-	'Q': rawAlphaMaskToWhiteMask(4, []byte{
+	'Q': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 1, 0,
@@ -795,7 +793,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'R': rawAlphaMaskToWhiteMask(4, []byte{
+	'R': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -806,7 +804,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'S': rawAlphaMaskToWhiteMask(4, []byte{
+	'S': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -826,7 +824,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		// 1, 1, 1, 1, // baseline
 		// 0, 0, 0, 0,
 	}),
-	'T': rawAlphaMaskToWhiteMask(3, []byte{
+	'T': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		1, 1, 1,
@@ -846,7 +844,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		// 0, 0, 1, 0, 0, // baseline
 		// 0, 0, 0, 0, 0,
 	}),
-	'U': rawAlphaMaskToWhiteMask(4, []byte{
+	'U': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 0, 0, 1,
@@ -875,7 +873,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		// 0, 1, 1, 1, 0, // baseline
 		// 0, 0, 0, 0, 0,
 	}),
-	'V': rawAlphaMaskToWhiteMask(5, []byte{
+	'V': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, // extra ascent
 		1, 0, 0, 0, 1,
@@ -886,7 +884,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 1, 0, 0, // baseline
 		0, 0, 0, 0, 0,		
 	}),
-	'W': rawAlphaMaskToWhiteMask(5, []byte{
+	'W': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, // extra ascent
 		1, 0, 0, 0, 1,
@@ -906,7 +904,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		// 0, 0, 1, 0, 1, 0, 0, // baseline
 		// 0, 0, 0, 0, 0, 0, 0,
 	}),
-	'X': rawAlphaMaskToWhiteMask(4, []byte{
+	'X': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 0, 0, 1,
@@ -917,7 +915,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'Y': rawAlphaMaskToWhiteMask(5, []byte{
+	'Y': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, // extra ascent
 		1, 0, 0, 0, 1,
@@ -928,7 +926,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 1, 0, 0, // baseline
 		0, 0, 0, 0, 0,
 	}),
-	'Z': rawAlphaMaskToWhiteMask(4, []byte{
+	'Z': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		1, 1, 1, 1,
@@ -939,7 +937,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'[': rawAlphaMaskToWhiteMask(2, []byte{
+	'[': rawMask(2, []byte{
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		1, 1,
@@ -950,7 +948,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, // baseline
 		0, 0,
 	}),
-	'\\': rawAlphaMaskToWhiteMask(3, []byte{
+	'\\': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		1, 0, 0,
@@ -961,7 +959,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 1, // baseline
 		0, 0, 0,
 	}),
-	']': rawAlphaMaskToWhiteMask(2, []byte{
+	']': rawMask(2, []byte{
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		1, 1,
@@ -972,7 +970,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, // baseline
 		0, 0,
 	}),
-	'^': rawAlphaMaskToWhiteMask(3, []byte{
+	'^': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		0, 1, 0,
@@ -983,7 +981,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, // baseline
 		0, 0, 0,
 	}),
-	'_': rawAlphaMaskToWhiteMask(3, []byte{
+	'_': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		0, 0, 0,
@@ -994,7 +992,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, // baseline
 		0, 0, 0,
 	}),
-	'`': rawAlphaMaskToWhiteMask(2, []byte{
+	'`': rawMask(2, []byte{
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		1, 0,
@@ -1005,7 +1003,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, // baseline
 		0, 0,
 	}),
-	'{': rawAlphaMaskToWhiteMask(3, []byte{
+	'{': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		0, 1, 1,
@@ -1016,7 +1014,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, // baseline
 		0, 0, 0,
 	}),
-	'|': rawAlphaMaskToWhiteMask(1, []byte{
+	'|': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		1,
@@ -1027,7 +1025,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, // baseline
 		0,
 	}),
-	'}': rawAlphaMaskToWhiteMask(3, []byte{
+	'}': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		1, 1, 0,
@@ -1038,7 +1036,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 0, // baseline
 		0, 0, 0,
 	}),
-	'~': rawAlphaMaskToWhiteMask(5, []byte{
+	'~': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0,
@@ -1051,7 +1049,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 	}),
 
 	// extra, common punctuation
-	'´': rawAlphaMaskToWhiteMask(2, []byte{
+	'´': rawMask(2, []byte{
 		0, 0, // extra ascent
 		0, 0, // extra ascent
 		0, 1,
@@ -1062,7 +1060,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, // baseline
 		0, 0,
 	}),
-	'¨': rawAlphaMaskToWhiteMask(3, []byte{
+	'¨': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		0, 0, 0, // extra ascent
 		1, 0, 1,
@@ -1073,7 +1071,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, // baseline
 		0, 0, 0,		
 	}),
-	'·': rawAlphaMaskToWhiteMask(1, []byte{
+	'·': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		0,
@@ -1084,7 +1082,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, // baseline
 		0,		
 	}),
-	'¡': rawAlphaMaskToWhiteMask(1, []byte{
+	'¡': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		1,
@@ -1095,7 +1093,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, // baseline
 		0,		
 	}),
-	'¿': rawAlphaMaskToWhiteMask(4, []byte{
+	'¿': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 0, 1, 0,
@@ -1106,7 +1104,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'¦': rawAlphaMaskToWhiteMask(1, []byte{
+	'¦': rawMask(1, []byte{
 		0, // extra ascent
 		0, // extra ascent
 		1,
@@ -1119,7 +1117,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 	}),
 
 	// accented letters
-	'À': rawAlphaMaskToWhiteMask(4, []byte{
+	'À': rawMask(4, []byte{
 		0, 1, 0, 0, // extra ascent
 		0, 0, 1, 0, // extra ascent
 		0, 0, 0, 0,
@@ -1130,7 +1128,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'Á': rawAlphaMaskToWhiteMask(4, []byte{
+	'Á': rawMask(4, []byte{
 		0, 0, 1, 0, // extra ascent
 		0, 1, 0, 0, // extra ascent
 		0, 0, 0, 0,
@@ -1141,7 +1139,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'Â': rawAlphaMaskToWhiteMask(4, []byte{
+	'Â': rawMask(4, []byte{
 		0, 1, 1, 0, // extra ascent
 		1, 0, 0, 1, // extra ascent
 		0, 0, 0, 0,
@@ -1152,7 +1150,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'Ä': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ä': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		1, 0, 0, 1, // extra ascent
 		0, 0, 0, 0,
@@ -1163,7 +1161,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, 0, 1, // baseline
 		0, 0, 0, 0,		
 	}),
-	'È': rawAlphaMaskToWhiteMask(3, []byte{
+	'È': rawMask(3, []byte{
 		1, 0, 0, // extra ascent
 		0, 1, 0, // extra ascent
 		0, 0, 0,
@@ -1174,7 +1172,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, // baseline
 		0, 0, 0,
 	}),
-	'É': rawAlphaMaskToWhiteMask(3, []byte{
+	'É': rawMask(3, []byte{
 		0, 0, 1, // extra ascent
 		0, 1, 0, // extra ascent
 		0, 0, 0,
@@ -1185,7 +1183,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, // baseline
 		0, 0, 0,
 	}),
-	'Ê': rawAlphaMaskToWhiteMask(3, []byte{
+	'Ê': rawMask(3, []byte{
 		0, 1, 0, // extra ascent
 		1, 0, 1, // extra ascent
 		0, 0, 0,
@@ -1196,7 +1194,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, // baseline
 		0, 0, 0,
 	}),
-	'Ë': rawAlphaMaskToWhiteMask(3, []byte{
+	'Ë': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		1, 0, 1, // extra ascent
 		0, 0, 0,
@@ -1207,7 +1205,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, // baseline
 		0, 0, 0,
 	}),
-	'Ì': rawAlphaMaskToWhiteMask(2, []byte{
+	'Ì': rawMask(2, []byte{
 		1, 0, // extra ascent
 		0, 1, // extra ascent
 		0, 0,
@@ -1218,7 +1216,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, // baseline
 		0, 0,
 	}),
-	'Í': rawAlphaMaskToWhiteMask(2, []byte{
+	'Í': rawMask(2, []byte{
 		0, 1, // extra ascent
 		1, 0, // extra ascent
 		0, 0,
@@ -1229,7 +1227,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 0, // baseline
 		0, 0,
 	}),
-	'Î': rawAlphaMaskToWhiteMask(3, []byte{
+	'Î': rawMask(3, []byte{
 		0, 1, 0, // extra ascent
 		1, 0, 1, // extra ascent
 		0, 0, 0,
@@ -1240,7 +1238,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 0, // baseline
 		0, 0, 0,
 	}),
-	'Ï': rawAlphaMaskToWhiteMask(3, []byte{
+	'Ï': rawMask(3, []byte{
 		0, 0, 0, // extra ascent
 		1, 0, 1, // extra ascent
 		0, 0, 0,
@@ -1251,7 +1249,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 0, // baseline
 		0, 0, 0,
 	}),
-	'Ò': rawAlphaMaskToWhiteMask(5, []byte{
+	'Ò': rawMask(5, []byte{
 		0, 1, 0, 0, 0, // extra ascent
 		0, 0, 1, 0, 0, // extra ascent
 		0, 0, 0, 0, 0,
@@ -1262,7 +1260,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 1, 0, // baseline
 		0, 0, 0, 0, 0,
 	}),
-	'Ó': rawAlphaMaskToWhiteMask(5, []byte{
+	'Ó': rawMask(5, []byte{
 		0, 0, 0, 1, 0, // extra ascent
 		0, 0, 1, 0, 0, // extra ascent
 		0, 0, 0, 0, 0,
@@ -1273,7 +1271,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 1, 0, // baseline
 		0, 0, 0, 0, 0,
 	}),
-	'Ô': rawAlphaMaskToWhiteMask(5, []byte{
+	'Ô': rawMask(5, []byte{
 		0, 0, 1, 0, 0, // extra ascent
 		0, 1, 0, 1, 0, // extra ascent
 		0, 0, 0, 0, 0,
@@ -1284,7 +1282,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 1, 0, // baseline
 		0, 0, 0, 0, 0,
 	}),
-	'Ö': rawAlphaMaskToWhiteMask(5, []byte{
+	'Ö': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 1, 0, 1, 0, // extra ascent
 		0, 0, 0, 0, 0,
@@ -1295,7 +1293,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 1, 0, // baseline
 		0, 0, 0, 0, 0,
 	}),
-	'Ù': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ù': rawMask(4, []byte{
 		0, 1, 0, 0, // extra ascent
 		0, 0, 1, 0, // extra ascent
 		0, 0, 0, 0,
@@ -1306,7 +1304,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'Ú': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ú': rawMask(4, []byte{
 		0, 0, 1, 0, // extra ascent
 		0, 1, 0, 0, // extra ascent
 		0, 0, 0, 0,
@@ -1317,7 +1315,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'Û': rawAlphaMaskToWhiteMask(4, []byte{
+	'Û': rawMask(4, []byte{
 		0, 1, 1, 0, // extra ascent
 		1, 0, 0, 1, // extra ascent
 		0, 0, 0, 0,
@@ -1328,7 +1326,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 1, // baseline
 		0, 0, 0, 0,
 	}),
-	'Ü': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ü': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		1, 0, 0, 1, // extra ascent
 		0, 0, 0, 0,
@@ -1341,7 +1339,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 	}),
 
 	// special symbols
-	'◀': rawAlphaMaskToWhiteMask(5, []byte{
+	'◀': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0,
@@ -1352,7 +1350,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		0, 0, 0, 0, 1, // baseline
 		0, 0, 0, 0, 0,
 	}),
-	'▶': rawAlphaMaskToWhiteMask(5, []byte{
+	'▶': rawMask(5, []byte{
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, 0,
@@ -1366,7 +1364,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 }
 
 var altBitmaps = map[rune]*image.Alpha{
-	'O': rawAlphaMaskToWhiteMask(4, []byte{
+	'O': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		0, 0, 0, 0, // extra ascent
 		0, 1, 1, 0,
@@ -1377,7 +1375,7 @@ var altBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,	
 	}),
-	'Ò': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ò': rawMask(4, []byte{
 		0, 1, 0, 0, // extra ascent
 		0, 0, 1, 0, // extra ascent
 		0, 0, 0, 0,
@@ -1388,7 +1386,7 @@ var altBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'Ó': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ó': rawMask(4, []byte{
 		0, 0, 1, 0, // extra ascent
 		0, 1, 0, 0, // extra ascent
 		0, 0, 0, 0,
@@ -1399,7 +1397,7 @@ var altBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'Ô': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ô': rawMask(4, []byte{
 		0, 1, 1, 0, // extra ascent
 		1, 0, 0, 1, // extra ascent
 		0, 0, 0, 0,
@@ -1410,7 +1408,7 @@ var altBitmaps = map[rune]*image.Alpha{
 		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 	}),
-	'Ö': rawAlphaMaskToWhiteMask(4, []byte{
+	'Ö': rawMask(4, []byte{
 		0, 0, 0, 0, // extra ascent
 		1, 0, 0, 1, // extra ascent
 		0, 0, 0, 0,

@@ -1,4 +1,4 @@
-module github.com/tinne26/ggfnt-fonts/src/omen
+module github.com/tinne26/ggfnt-fonts/src/candy
 
 go 1.22.2
 

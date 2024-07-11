@@ -1,29 +1,30 @@
-package graybit
+package candy
 
 import "io"
 import _ "embed"
 import "github.com/tinne26/ggfnt"
 
-//go:embed graybit-5d2-v0p5.ggfnt
+//go:embed candy-10d2-v0p1.ggfnt
 var bytes []byte
 
 var cachedFont *ggfnt.Font
 
 const NotdefRune = '\uE000'
 const Notdef = ggfnt.GlyphIndex(0)
-const LowHyphenRune = '\uE001'
-const LowHyphen = ggfnt.GlyphIndex(180)
-
-const ZeroDisambiguationMarkSettingKey = ggfnt.SettingKey(0)
-const ZeroDisambiguationMarkSettingName = "zero-disambiguation-mark"
-const NumericStyleSettingKey = ggfnt.SettingKey(1)
-const NumericStyleSettingName = "numeric-style"
+const FatDotRune = '\uED01'
+const FatDot = ggfnt.GlyphIndex(82)
+const CandyRune = '🍬'
+const Candy = ggfnt.GlyphIndex(88)
+const DyeCandyRune = '\uEDCA'
+const DyeCandy = ggfnt.GlyphIndex(89)
 
 func Release() { cachedFont = nil }
 func Font() *ggfnt.Font {
 	if cachedFont == nil {
 		font, err := ggfnt.Parse(&byteSliceReader{ data: bytes })
-		if err != nil { panic(err) } // (go test .)
+		if err != nil {
+			panic("tinne26/ggfnt-fonts broken version testing: " + err.Error())
+		}
 		cachedFont = font
 	}
 	return cachedFont
