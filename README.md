@@ -14,7 +14,7 @@ This project exposes free [ggfnt](https://github.com/tinne26/ggfnt) fonts for us
 ![sample_omen](https://github.com/tinne26/ggfnt-fonts/assets/95440833/b08fdc74-cc46-4d4a-8a8c-4c9f44a999d1)
 
 `github.com/tinne26/ggfnt-fonts/candy`
-
+![sample_candy](https://github.com/user-attachments/assets/00f377b1-985e-4061-b367-32bd055e5a03)
 
 `github.com/tinne26/ggfnt-fonts/starship`
 ![sample_starship](https://github.com/tinne26/ggfnt-fonts/assets/95440833/c4309f82-1a38-475a-932b-defdecaf396e)
