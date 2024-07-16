@@ -1,22 +1,16 @@
-package candy
+package minitile
 
 import "io"
 import _ "embed"
 import "github.com/tinne26/ggfnt"
 
-//go:embed candy-10d2-v0p2.ggfnt
+//go:embed minitile-6d1-v0p1.ggfnt
 var bytes []byte
 
 var cachedFont *ggfnt.Font
 
 const NotdefRune = '\uE000'
 const Notdef = ggfnt.GlyphIndex(0)
-const FatDotRune = '\uED01'
-const FatDot = ggfnt.GlyphIndex(82)
-const CandyRune = '🍬'
-const Candy = ggfnt.GlyphIndex(90)
-const DyeCandyRune = '\uEDCA'
-const DyeCandy = ggfnt.GlyphIndex(91)
 
 func Release() { cachedFont = nil }
 func Font() *ggfnt.Font {

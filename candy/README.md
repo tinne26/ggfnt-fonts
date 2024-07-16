@@ -15,6 +15,7 @@ Common glyphs:
 - Full ASCII range except for lowercase letters `a-z`.
 - Other common punctuation symbols `¡ ¿`, `– ‑ —`, `‘’ “” • …`.
 - Spanish letters `ÑÇ`.
+- Hair and thin spaces (` `, ` `).
 
 Named glyphs:
 - `"notdef"`, also mapped to `'\uE000'` for accessibility.
@@ -23,7 +24,7 @@ Named glyphs:
 - `"fat-dot"`, also mapped to `'\uED01'`. This is 4x4 instead of the default 2x2. It does look better, but it's not consistent with other punctuation symbols (`¿¡:;!?`).
 
 > [!TIP]
-> The named glyphs are also accessible as package constants (`candy.CandyRune`, `candy.Candy`, `candy.FatDotRune`, `candy.FatDot`, etc).
+> Named glyphs are also accessible as package constants (`candy.CandyRune`, `candy.Candy`, `candy.FatDotRune`, `candy.FatDot`, etc).
 
 ## License
 

@@ -25,7 +25,7 @@ func main() {
 	if err != nil { panic(err) }
 	err = fontBuilder.SetFirstVerDate(ggfnt.Date{ Month: 7, Day: 10, Year: 2024 })
 	if err != nil { panic(err) }
-	fontBuilder.SetVersion(0, 1)
+	fontBuilder.SetVersion(0, 2)
 
 	// set metrics
 	fmt.Print("...setting metrics\n")
@@ -75,6 +75,7 @@ func main() {
 	// addRunes(fontBuilder, runeToUID, '€', '¢', '¥', '¤') // currency symbols
 	addRunes(fontBuilder, runeToUID, 'Ñ', 'Ç') // ++latin letters
 	addRunes(fontBuilder, runeToUID, '–', '‑', '—') // ++dashes
+	addRunes(fontBuilder, runeToUID, ' ', ' ') // thin space and hair space for padding
 	//addRunes(fontBuilder, runeToUID, '♩', '♪', '♫', '♬') // notes
 	//addRunes(fontBuilder, runeToUID, '❤', '💔', '�') // special
 	
@@ -130,7 +131,7 @@ func main() {
 	fmt.Printf("...raw size of %d bytes\n", font.RawSize())
 
 	// export
-	const FileName = "candy-10d2-v0p1.ggfnt"
+	const FileName = "candy-10d2-v0p2.ggfnt"
 	file, err := os.Create(FileName)
 	if err != nil { panic(err) }
 	fmt.Printf("...exporting %s\n", FileName)
@@ -225,6 +226,12 @@ var monocandy = rawMask(12, 1, []byte{
 var pkgBitmaps = map[rune]*image.Alpha{
 	// --- ascii table ---
 	' ': rawMask(6, 0, []byte{
+		0, 0, 0, 0, 0, 0,
+	}),
+	' ': rawMask(3, 0, []byte{ // thin space
+		0, 0, 0, 0, 0, 0,
+	}),
+	' ': rawMask(1, 0, []byte{ // hair space
 		0, 0, 0, 0, 0, 0,
 	}),
 	'!': rawMask(4, 0, []byte{
