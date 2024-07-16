@@ -22,6 +22,10 @@ This project exposes free [ggfnt](https://github.com/tinne26/ggfnt) fonts for us
 `github.com/tinne26/ggfnt-fonts/flick`
 ![sample_flick](https://github.com/tinne26/ggfnt-fonts/assets/95440833/244ae966-8191-4544-933b-8fb6954598c0)
 
+`github.com/tinne26/ggfnt-fonts/minitile`
+![sample_minitile](https://github.com/user-attachments/assets/7c410318-c395-43c5-9bda-51c6e26e6f4f)
+
+
 ## Licenses
 
 Most fonts in this project are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), though some might be adaptations of well known fonts designed in other formats and with their own licenses. See each font subfolder for additional details.
