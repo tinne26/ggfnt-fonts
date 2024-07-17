@@ -16,6 +16,9 @@ This project exposes free [ggfnt](https://github.com/tinne26/ggfnt) fonts for us
 `github.com/tinne26/ggfnt-fonts/candy`
 ![sample_candy](https://github.com/user-attachments/assets/00f377b1-985e-4061-b367-32bd055e5a03)
 
+`github.com/tinne26/ggfnt-fonts/strut`
+
+
 `github.com/tinne26/ggfnt-fonts/starship`
 ![sample_starship](https://github.com/tinne26/ggfnt-fonts/assets/95440833/c4309f82-1a38-475a-932b-defdecaf396e)
 
@@ -66,10 +69,12 @@ I actually made some of the pangrams for the examples on my own, here they are:
 - Saxophonists frequently acknowledge my jazzy vibes.
 - Catalyzer hijack verified, equip low oxygen bombs.
 - Objectively speaking, frozen marshmallows are darn exquisite.
+- Hendrix's jam —if unequivocably squawky— was hypnotizing.
 - Josephine, buddy, the squeezy wolfkin are exclusively mine!
 
 They are a tad long, but at least some of them have nice and understandable stories. A few more variations:
 - Wanted zombie geeks aquire explosive jellyfish. *(shorter but less funny imo)*
 - Saxophonists disqualify overembellished spacewalking jazz. *(only five words, but convoluted)*
+- Hendrix's jam was hypnotizing, unequivocably funky.
 
 Sadly, I don't know the authors of "amazingly few discotheques provide jukeboxes", "sphinx of black quartz, judge my vow" and other cool pangrams; I'd love to give them credit otherwise!
