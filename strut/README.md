@@ -1,4 +1,4 @@
-# unnamed
+# strut
 [![Go Reference](https://pkg.go.dev/badge/tinne26/ggfnt-fonts/strut.svg)](https://pkg.go.dev/github.com/tinne26/ggfnt-fonts/strut)
 
 A swaggy font with some afrobeat / funky / 80s energy to it, but still quite angular and rigid despite some of the more playful features. The font covers the full ASCII range and a few more common glyphs.
