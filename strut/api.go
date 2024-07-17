@@ -11,6 +11,8 @@ var cachedFont *ggfnt.Font
 
 const NotdefRune = '\uE000'
 const Notdef = ggfnt.GlyphIndex(0)
+const ZeroDisambiguationMarkSettingKey = ggfnt.SettingKey(0)
+const ZeroDisambiguationMarkSettingName = "zero-disambiguation-mark"
 
 func Release() { cachedFont = nil }
 func Font() *ggfnt.Font {

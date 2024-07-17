@@ -7,6 +7,8 @@ import "image"
 import "github.com/tinne26/ggfnt"
 import "github.com/tinne26/ggfnt/builder"
 
+var SwitchZeroKey uint8
+
 func main() {
 	// create font builder
 	fmt.Print("creating new font builder\n")
@@ -37,6 +39,12 @@ func main() {
 	fontBuilder.SetHorzInterspacing(1)
 	fontBuilder.SetLineGap(2)
 	err = fontBuilder.GetMetricsStatus()
+	if err != nil { panic(err) }
+
+	// zero disambiguation mark
+	settingZeroDisKey, err := fontBuilder.AddSetting("zero-disambiguation-mark", "off", "on")
+	if err != nil { panic(err) }
+	SwitchZeroKey, err = fontBuilder.AddSwitch(settingZeroDisKey)
 	if err != nil { panic(err) }
 
 	// add notdef as the glyph zero
@@ -123,7 +131,13 @@ func addRuneRange(fontBuilder *builder.Font, codePointsMap map[rune]uint64, star
 		if !found { panic("missing bitmap for '" + string(codePoint) + "'") }
 		uid, err := fontBuilder.AddGlyph(bitmap)
 		if err != nil { panic(err) }
-		err = fontBuilder.Map(codePoint, uid)
+		if codePoint == '0' {
+			disZeroUID, err := fontBuilder.AddGlyph(disZero)
+			if err != nil { panic(err) }
+			err = fontBuilder.MapWithSwitchSingles(codePoint, SwitchZeroKey, uid, disZeroUID)
+		} else {
+			err = fontBuilder.Map(codePoint, uid)
+		}
 		if err != nil { panic(err) }
 		codePointsMap[codePoint] = uid
 	}
@@ -158,6 +172,15 @@ var notdef = rawMask(4, 1, []byte{
 	1, 0, 0, 1,
 	1, 0, 0, 1,
 	1, 0, 0, 1, // baseline
+	1, 1, 1, 1,
+})
+
+var disZero = rawMask(4, 0, []byte{
+	1, 1, 1, 1,
+	1, 0, 1, 1,
+	1, 0, 0, 1,
+	1, 0, 0, 1,
+	1, 1, 0, 1,
 	1, 1, 1, 1,
 })
 
@@ -284,9 +307,9 @@ var pkgBitmaps = map[rune]*image.Alpha{
 	}),
 	'0': rawMask(4, 0, []byte{
 		1, 1, 1, 1,
-		1, 0, 1, 1,
-		1, 0, 0, 1,
-		1, 0, 0, 1,
+		1, 1, 0, 1,
+		1, 1, 0, 1,
+		1, 1, 0, 1,
 		1, 1, 0, 1,
 		1, 1, 1, 1,
 	}),
