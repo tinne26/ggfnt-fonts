@@ -1022,7 +1022,7 @@ var pkgBitmaps = map[rune]*image.Alpha{
 		1, 1, 1, 0,
 		1, 1, 0, 1,
 		1, 1, 1, 1,
-		1, 1, 1, 0, // baseline
+		0, 1, 1, 0, // baseline
 		0, 0, 0, 0,
 		0, 0, 0, 0,
 		0, 0, 0, 0,
