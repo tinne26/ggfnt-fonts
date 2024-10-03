@@ -1,8 +1,6 @@
-package starship
+package tinnybold
 
 import "testing"
-
-import "github.com/tinne26/ggfnt"
 
 func TestFont(t *testing.T) {
 	// test initial state and parsing
@@ -11,7 +9,7 @@ func TestFont(t *testing.T) {
 	if cachedFont == nil { t.Fatal("cachedFont == nil") }
 
 	// ensure font name is what we expected
-	const ExpectedFontName = "starship"
+	const ExpectedFontName = "tinny-bold"
 	name := font.Header().Name()
 	if name != ExpectedFontName {
 		t.Fatalf("expected font name to be \"" + ExpectedFontName + "\", got \"%s\" instead", name)
@@ -28,22 +26,6 @@ func TestFont(t *testing.T) {
 	notdefGlyphIndex := mappingGroup.Select(0)
 	if notdefGlyphIndex != Notdef {
 		t.Fatalf("expected Notdef to be mapped to %d, found %d", Notdef, notdefGlyphIndex)
-	}
-
-	// check setting names and keys
-	var settingFound bool
-	font.Settings().Each(func(key ggfnt.SettingKey, name string) {
-		switch name {
-		case CutsSettingName:
-			if settingFound { panic("broken font") }
-			if key != CutsSettingKey {
-				t.Fatalf("expected CutsSettingKey to be %d, found %d", CutsSettingKey, key)
-			}
-			settingFound = true
-		}
-	})
-	if !settingFound {
-		t.Fatalf("expected to find Cuts setting as '%s'", CutsSettingName)
 	}
 
 	// test release

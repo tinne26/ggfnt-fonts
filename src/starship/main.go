@@ -9,6 +9,8 @@ import "github.com/tinne26/ggfnt/builder"
 
 // TODO: flag for monospaced numbers
 
+var cutSwitchType uint8
+
 func main() {
 	// create font builder
 	fmt.Print("creating new font builder\n")
@@ -26,7 +28,7 @@ func main() {
 	if err != nil { panic(err) }
 	err = fontBuilder.SetFirstVerDate(ggfnt.Date{ Month: 7, Day: 10, Year: 2024 })
 	if err != nil { panic(err) }
-	fontBuilder.SetVersion(0, 2)
+	fontBuilder.SetVersion(0, 3)
 
 	// set metrics
 	fmt.Print("...setting metrics\n")
@@ -38,6 +40,12 @@ func main() {
 	fontBuilder.SetHorzInterspacing(1)
 	fontBuilder.SetLineGap(3)
 	err = fontBuilder.GetMetricsStatus()
+	if err != nil { panic(err) }
+
+	// create setting for the glyph cuts, allowing two different levels
+	settingKey, err := fontBuilder.AddSetting("cuts", "default", "reduced")
+	if err != nil { panic(err) }
+	cutSwitchType, err = fontBuilder.AddSwitch(settingKey)
 	if err != nil { panic(err) }
 
 	// add notdef as the glyph zero
@@ -96,7 +104,7 @@ func main() {
 	fmt.Printf("...raw size of %d bytes\n", font.RawSize())
 
 	// export
-	const FileName = "starship-6d0-v0p2.ggfnt"
+	const FileName = "starship-6d0-v0p3.ggfnt"
 	file, err := os.Create(FileName)
 	if err != nil { panic(err) }
 	fmt.Printf("...exporting %s\n", FileName)
@@ -117,11 +125,17 @@ func addRuneRange(fontBuilder *builder.Font, codePointsMap map[rune]uint64, star
 	for codePoint := start; codePoint <= end; codePoint++ {
 		bitmap, found := pkgBitmaps[rune(codePoint)]
 		if !found { panic("missing bitmap for '" + string(codePoint) + "'") }
-		uid, err := fontBuilder.AddGlyph(bitmap) // *
-		// * most glyphs work ok with the default placement.
-		//   the remaining ones can still be adjusted afterwards
+		uid, err := fontBuilder.AddGlyph(bitmap)
 		if err != nil { panic(err) }
-		err = fontBuilder.Map(codePoint, uid)
+		
+		altBitmap, hasAltBitmap := reducedCutAltBitmaps[codePoint]
+		if hasAltBitmap {
+			altUID, err := fontBuilder.AddGlyph(altBitmap)
+			if err != nil { panic(err) }
+			err = fontBuilder.MapWithSwitchSingles(codePoint, cutSwitchType, uid, altUID)
+		} else {
+			err = fontBuilder.Map(codePoint, uid)
+		}
 		if err != nil { panic(err) }
 		codePointsMap[codePoint] = uid
 	}
@@ -131,9 +145,17 @@ func addRunes(fontBuilder *builder.Font, codePointsMap map[rune]uint64, runes ..
 	for _, codePoint := range runes {
 		bitmap, found := pkgBitmaps[rune(codePoint)]
 		if !found { panic("missing bitmap for '" + string(codePoint) + "'") }
-		uid, err := fontBuilder.AddGlyph(bitmap) // *
+		uid, err := fontBuilder.AddGlyph(bitmap)
 		if err != nil { panic(err) }
-		err = fontBuilder.Map(codePoint, uid)
+		
+		altBitmap, hasAltBitmap := reducedCutAltBitmaps[codePoint]
+		if hasAltBitmap {
+			altUID, err := fontBuilder.AddGlyph(altBitmap)
+			if err != nil { panic(err) }
+			err = fontBuilder.MapWithSwitchSingles(codePoint, cutSwitchType, uid, altUID)
+		} else {
+			err = fontBuilder.Map(codePoint, uid)
+		}
 		if err != nil { panic(err) }
 		codePointsMap[codePoint] = uid
 	}
@@ -163,6 +185,63 @@ var notdef = rawMask(4, []byte{
 	1, 0, 0, 1, // baseline
 	1, 1, 1, 1,
 })
+
+var reducedCutAltBitmaps = map[rune]*image.Alpha{
+	'S': rawMask(4, []byte{
+		1, 1, 1, 1,
+		1, 0, 0, 0,
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 0, 0, 1,
+		1, 1, 1, 1, // baseline
+		0, 0, 0, 0,
+	}),
+	'H': rawMask(4, []byte{
+		1, 0, 0, 1,
+		1, 0, 0, 1,
+		1, 0, 0, 1,
+		1, 1, 1, 1,
+		1, 0, 0, 1,
+		1, 0, 0, 1, // baseline
+		0, 0, 0, 0,
+	}),
+	'U': rawMask(4, []byte{
+		1, 0, 0, 1,
+		1, 0, 0, 1,
+		1, 0, 0, 1,
+		1, 0, 0, 1,
+		1, 0, 0, 1,
+		1, 1, 1, 1, // baseline
+		0, 0, 0, 0,
+	}),
+	'F': rawMask(3, []byte{
+		1, 1, 1,
+		1, 0, 0,
+		1, 0, 0,
+		1, 1, 0,
+		1, 0, 0,
+		1, 0, 0, // baseline
+		0, 0, 0,
+	}),
+	'2': rawMask(4, []byte{
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 0, 0, 1,
+		1, 1, 1, 1,
+		1, 0, 0, 0,
+		1, 1, 1, 1, // baseline
+		0, 0, 0, 0,
+	}),
+	'3': rawMask(4, []byte{
+		1, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 1, 1, 1,
+		0, 0, 0, 1,
+		0, 0, 0, 1,
+		1, 1, 1, 1, // baseline
+		0, 0, 0, 0,
+	}),
+}
 
 var pkgBitmaps = map[rune]*image.Alpha{
 	// --- ascii table ---

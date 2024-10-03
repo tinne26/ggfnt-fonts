@@ -83,6 +83,10 @@ func main() {
 	}
 	fontBuilder.SetKerningPair(runeToUID['.'], runeToUID['?'], -2) // improve "..?"
 
+	for _, codePoint := range "acegmnopqrsuvwxyz" { // slightly reduce space for most F + lowercase pairings
+		fontBuilder.SetKerningPair(runeToUID['F'], runeToUID[codePoint], -1)
+	}
+
 	// adjust j (would greatly benefit from kerning ranges or default to -1,
 	// which could indeed be set as the first value with a special control...)
 	for _, codePoint := range ".-~—\"'‘’“$AÀÁÄÂBCÇDEÈÉËÊFGHIÌÍÏÎJKLMNÑOÒÓÖÔPQRSTUÙÚÜÛVWXYZaàáäâbcçdeèéëêfhiìíïîklmnñoòóöôprstuùúüûvwxz0123456789" {

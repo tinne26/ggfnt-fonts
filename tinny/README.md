@@ -4,8 +4,9 @@
 A very low resolution, rounded and friendly-looking font with a fairly decent latin character set. This font was the second one created for the ggfnt format, having two main goals:
 - Create the first proper font for ggfnt, covering at least the basic ASCII range.
 - Test kernings for ggfnt and ptxt.
+There's also a [bold version](https://github.com/tinne26/ggfnt-fonts/tree/main/tinnybold) of the font that can be used alongside it.
 
-The name was suggested by Zyko as a pun for tiny + tinne. He regretted the silly joke almost instantly, but it was already too late... and the name stuck.
+The name was suggested by [Zyko](https://github.com/Zyko0) as a pun for tiny + tinne. He regretted the silly joke almost instantly, but it was already too late... and the name stuck.
 
 The import path is:
 ```Golang

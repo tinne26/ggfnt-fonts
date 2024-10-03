@@ -26,14 +26,6 @@ func Font() *ggfnt.Font {
 
 // --- glyph picker ---
 
-// mimics ptxt/strand.GlyphPickerPass
-type glyphPickerPass = uint8
-const (
-	measurePass glyphPickerPass = iota
-	drawPass
-	bufferPass
-)
-
 // Can be configured and used with ptxt:
 //   var picker flick.GoldenPicker
 //   strand.GlyphPickers().Add(&picker)
@@ -74,9 +66,9 @@ func (self *GoldenPicker) Pick(codePoint rune, groupSize uint8, flags ggfnt.Anim
 func (self *GoldenPicker) NotifyAddedGlyph(ggfnt.GlyphIndex, rune, uint8, ggfnt.AnimationFlags) {}
 
 // Implements ptxt/strand.GlyphPicker.
-func (self *GoldenPicker) NotifyPass(pass glyphPickerPass, start bool) {
+func (self *GoldenPicker) NotifyContext(context uint8) {
 	if !self.initialized { self.initialize() }
-	if start {
+	if context & 0b0011_1000 != 0 {
 		now := time.Now()
 		if now.After(self.nextFlipTime) {
 			self.nextFlipTime = now.Add(self.stateDuration)
@@ -161,9 +153,9 @@ func (self *PulsePicker) Pick(codePoint rune, groupSize uint8, flags ggfnt.Anima
 func (self *PulsePicker) NotifyAddedGlyph(ggfnt.GlyphIndex, rune, uint8, ggfnt.AnimationFlags) {}
 
 // Implements ptxt/strand.GlyphPicker.
-func (self *PulsePicker) NotifyPass(pass glyphPickerPass, start bool) {
+func (self *PulsePicker) NotifyContext(context uint8) {
 	if !self.initialized { self.initialize() }
-	if start {
+	if context & 0b0011_1000 != 0 {
 		now := time.Now()
 		diff := now.Sub(self.lastStart)
 		self.lastStart = now

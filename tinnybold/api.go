@@ -1,30 +1,28 @@
-package starship
+package tinnybold
 
 import "io"
 import _ "embed"
 import "github.com/tinne26/ggfnt"
 
-//go:embed starship-6d0-v0p3.ggfnt
+//go:embed tinny-bold-6d3-v0p1.ggfnt
 var bytes []byte
 
 var cachedFont *ggfnt.Font
 
 const NotdefRune = '\uE000'
 const Notdef = ggfnt.GlyphIndex(0)
-const CutsSettingKey = ggfnt.SettingKey(0)
-const CutsSettingName = "cuts"
 
 func Release() { cachedFont = nil }
 func Font() *ggfnt.Font {
 	if cachedFont == nil {
 		font, err := ggfnt.Parse(&byteSliceReader{ data: bytes })
-		if err != nil { panic(err) } // (go test .)
+		if err != nil {
+			panic("tinne26/ggfnt-fonts broken version testing: " + err.Error())
+		}
 		cachedFont = font
 	}
 	return cachedFont
 }
-
-// --- helpers ---
 
 type byteSliceReader struct { data []byte ; index int }
 func (self *byteSliceReader) Read(buffer []byte) (int, error) {
