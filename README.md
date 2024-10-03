@@ -5,29 +5,31 @@ This project exposes free [ggfnt](https://github.com/tinne26/ggfnt) fonts for us
 ## Font samples
 
 `github.com/tinne26/ggfnt-fonts/tinny`
-![sample_tinny](https://github.com/tinne26/ggfnt-fonts/assets/95440833/a87208ad-e963-470d-91d2-a8a8348ef10b)
+![sample_tinny](https://github.com/user-attachments/assets/1e3326d6-6831-4c1b-8116-0d0a858ab561)
+
+`github.com/tinne26/ggfnt-fonts/tinnybold`
+![sample_tinny_bold](https://github.com/user-attachments/assets/636ab70b-98f5-4b5d-ab6c-d035ec428026)
 
 `github.com/tinne26/ggfnt-fonts/graybit`
-![sample_graybit](https://github.com/tinne26/ggfnt-fonts/assets/95440833/66f07930-bde0-4e23-8adf-82e2a60487f7)
+![sample_graybit](https://github.com/user-attachments/assets/a9bd799b-9ded-43f2-8081-0d788940339f)
 
 `github.com/tinne26/ggfnt-fonts/omen`
-![sample_omen](https://github.com/tinne26/ggfnt-fonts/assets/95440833/b08fdc74-cc46-4d4a-8a8c-4c9f44a999d1)
+![sample_omen](https://github.com/user-attachments/assets/19e1739d-398d-41f4-9bea-4650decb1399)
 
 `github.com/tinne26/ggfnt-fonts/candy`
-![sample_candy](https://github.com/user-attachments/assets/00f377b1-985e-4061-b367-32bd055e5a03)
+![sample_candy](https://github.com/user-attachments/assets/25fbd09e-0030-40cf-ad38-02c53056224f)
 
 `github.com/tinne26/ggfnt-fonts/strut`
-![sample_strut](https://github.com/user-attachments/assets/c71740b6-acf6-442e-933b-5076d73892f5)
+![sample_strut](https://github.com/user-attachments/assets/8d195df0-09fb-4cd8-a5a2-1859b8745bd4)
 
 `github.com/tinne26/ggfnt-fonts/starship`
-![sample_starship](https://github.com/tinne26/ggfnt-fonts/assets/95440833/c4309f82-1a38-475a-932b-defdecaf396e)
+![sample_starship](https://github.com/user-attachments/assets/46b62db4-2b61-40b7-abf7-02a1cc5107f0)
 
 `github.com/tinne26/ggfnt-fonts/flick`
-![sample_flick](https://github.com/tinne26/ggfnt-fonts/assets/95440833/244ae966-8191-4544-933b-8fb6954598c0)
+![sample_flick](https://github.com/user-attachments/assets/73b5ec93-4e73-47cc-be10-9a552af02050)
 
 `github.com/tinne26/ggfnt-fonts/minitile`
-![sample_minitile](https://github.com/user-attachments/assets/7c410318-c395-43c5-9bda-51c6e26e6f4f)
-
+![sample_minitile](https://github.com/user-attachments/assets/6fca2315-0efe-4d8d-9140-a5e13eab6a4e)
 
 ## Licenses
 
